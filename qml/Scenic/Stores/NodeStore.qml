@@ -203,11 +203,14 @@ QtObject {
         const devName = nodeId + "_dev"
         if (info.hasDevice) {
             Score.createDevice(devName, recipe.protocol, info.settings)
-            // createDevice does not report failure: look for the result
+            // createDevice does not report failure: look for the result. A node
+            // without its device would route to nothing, so it is not created
+            // (e.g. NDI without the NDI runtime).
             if (!Score.device(devName)) {
                 console.error("NodeStore: device creation failed for", devName)
                 NotificationStore.error(
                     Translations.t("Could not create the device for ") + info.label)
+                return false
             }
         }
 
