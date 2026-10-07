@@ -44,7 +44,8 @@ jobs:
           macos-notarize-password: ${{ secrets.MAC_NOTARIZE_PASSWORD }}
 
       # The headless suites, against the engine just built. The AppImage is
-      # extracted rather than run: runners have no FUSE.
+      # extracted rather than run: runners have no FUSE. Its AppRun locates
+      # the application through APPDIR, which the AppImage runtime would set.
       - name: Tests
         if: runner.os == 'Linux'
         run: |
@@ -53,7 +54,8 @@ jobs:
           test -n "$img"
           chmod +x "$img"
           "$img" --appimage-extract > /dev/null
-          export SCORE_BIN="$PWD/squashfs-root/AppRun"
+          export APPDIR="$PWD/squashfs-root"
+          export SCORE_BIN="$APPDIR/AppRun"
           ./tools/test-stress.sh
           SCENIC_PROTO_SCENARIOS="schema graph" ./tools/test-protocols.sh
 
