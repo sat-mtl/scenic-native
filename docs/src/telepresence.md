@@ -54,3 +54,6 @@ settings file, never in sessions.
 - The signalling server is not authenticated: anyone who can reach it can
   list and watch the streams. Run it on a trusted network.
 - Only static TURN credentials are supported.
+- The **Peers** panel lists streams from a plain `ws://host:port` signalling
+  server. WebRTC nodes created by hand (the **WebRTC Publish** destinations)
+  accept any signalling address, `wss://` and paths included.

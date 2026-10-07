@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Scenic Native\n"
-"POT-Creation-Date: 2026-10-07T03:24:05Z\n"
+"POT-Creation-Date: 2026-10-07T05:06:17Z\n"
 "PO-Revision-Date: 2026-10-07T03:24:05Z\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: src/SUMMARY.md:1
@@ -50,13 +50,20 @@ msgid ""
 "gitlab.com/sat-mtl/tools/scenic/scenic), the telepresence application of the "
 "[Société des Arts Technologiques](https://sat.qc.ca), built on the [ossia "
 "score](https://ossia.io) engine."
-msgstr "Scenic Native achemine en direct l'audio, la vidéo et les données entre appareils, logiciels et sites distants. C'est une réimplémentation native de [Scenic](https://gitlab.com/sat-mtl/tools/scenic/scenic), l'application de téléprésence de la [Société des Arts Technologiques](https://sat.qc.ca), construite sur le moteur [ossia score](https://ossia.io)."
+msgstr ""
+"Scenic Native achemine en direct l'audio, la vidéo et les données entre "
+"appareils, logiciels et sites distants. C'est une réimplémentation native de "
+"[Scenic](https://gitlab.com/sat-mtl/tools/scenic/scenic), l'application de "
+"téléprésence de la [Société des Arts Technologiques](https://sat.qc.ca), "
+"construite sur le moteur [ossia score](https://ossia.io)."
 
 #: src/intro.md:9
 msgid ""
 "Everything happens in one **matrix**: sources are rows, destinations are "
 "columns, and clicking a cell connects them."
-msgstr "Tout se passe dans une **matrice** : les sources sont les lignes, les destinations les colonnes, et un clic sur une case les connecte."
+msgstr ""
+"Tout se passe dans une **matrice** : les sources sont les lignes, les "
+"destinations les colonnes, et un clic sur une case les connecte."
 
 #: src/intro.md:12
 msgid ""
@@ -64,36 +71,52 @@ msgid ""
 "patterns and tones, audio inputs, NDI®, shmdata and Sh4lt, Spout and Syphon, "
 "GStreamer and FFmpeg inputs, MIDI, OSC and other data over UDP, TCP, "
 "WebSocket or serial, and streams from remote peers."
-msgstr "**Sources :** caméras, capture d'écran et de fenêtre, fichiers vidéo et audio, mires et signaux de test, entrées audio, NDI®, shmdata et Sh4lt, Spout et Syphon, entrées GStreamer et FFmpeg, MIDI, OSC et autres données par UDP, TCP, WebSocket ou port série, et flux de postes distants."
+msgstr ""
+"**Sources :** caméras, capture d'écran et de fenêtre, fichiers vidéo et "
+"audio, mires et signaux de test, entrées audio, NDI®, shmdata et Sh4lt, "
+"Spout et Syphon, entrées GStreamer et FFmpeg, MIDI, OSC et autres données "
+"par UDP, TCP, WebSocket ou port série, et flux de postes distants."
 
 #: src/intro.md:16
 msgid ""
 "**Destinations:** video windows, audio outputs, recording to a file, RTMP "
 "and SRT streaming, NDI®, shmdata and Sh4lt, Spout and Syphon, GStreamer and "
 "FFmpeg outputs, data outputs, and publication to remote peers."
-msgstr "**Destinations :** fenêtres vidéo, sorties audio, enregistrement dans un fichier, diffusion RTMP et SRT, NDI®, shmdata et Sh4lt, Spout et Syphon, sorties GStreamer et FFmpeg, sorties de données, et publication vers des postes distants."
+msgstr ""
+"**Destinations :** fenêtres vidéo, sorties audio, enregistrement dans un "
+"fichier, diffusion RTMP et SRT, NDI®, shmdata et Sh4lt, Spout et Syphon, "
+"sorties GStreamer et FFmpeg, sorties de données, et publication vers des "
+"postes distants."
 
 #: src/intro.md:19
 msgid ""
 "**Telepresence** uses WebRTC, through the same signalling protocol as Scenic "
 "5, aiguille and web browsers."
-msgstr "La **téléprésence** passe par WebRTC, avec le même protocole de signalisation que Scenic 5, aiguille et les navigateurs web."
+msgstr ""
+"La **téléprésence** passe par WebRTC, avec le même protocole de "
+"signalisation que Scenic 5, aiguille et les navigateurs web."
 
 #: src/intro.md:21
 msgid ""
 "Several sources sent to one video destination are composited; audio sources "
 "sent to one output are mixed."
-msgstr "Plusieurs sources envoyées vers une même destination vidéo sont composées ; les sources audio envoyées vers une même sortie sont mixées."
+msgstr ""
+"Plusieurs sources envoyées vers une même destination vidéo sont composées ; "
+"les sources audio envoyées vers une même sortie sont mixées."
 
 #: src/intro.md:23
 msgid ""
 "**Scenes** store sets of connections and switch between them in one click."
-msgstr "Les **scènes** mémorisent des ensembles de connexions et passent de l'un à l'autre en un clic."
+msgstr ""
+"Les **scènes** mémorisent des ensembles de connexions et passent de l'un à "
+"l'autre en un clic."
 
 #: src/intro.md:24
 msgid ""
 "**Sessions** save everything: nodes, their settings, connections and scenes."
-msgstr "Les **sessions** enregistrent tout : les nœuds, leurs réglages, les connexions et les scènes."
+msgstr ""
+"Les **sessions** enregistrent tout : les nœuds, leurs réglages, les "
+"connexions et les scènes."
 
 #: src/intro.md:25
 msgid "Every edit can be undone."
@@ -112,7 +135,10 @@ msgid ""
 "Builds for Linux (AppImage), macOS and Windows are on the [releases page]"
 "(https://github.com/sat-mtl/scenic-native/releases). The `continuous` "
 "release follows the latest development version."
-msgstr "Les versions pour Linux (AppImage), macOS et Windows sont sur la [page des versions](https://github.com/sat-mtl/scenic-native/releases). La version `continuous` suit la dernière version de développement."
+msgstr ""
+"Les versions pour Linux (AppImage), macOS et Windows sont sur la [page des "
+"versions](https://github.com/sat-mtl/scenic-native/releases). La version "
+"`continuous` suit la dernière version de développement."
 
 #: src/installation.md:9 src/nodes.md:16 src/nodes.md:24 src/nodes.md:26
 #: src/nodes.md:27 src/nodes.md:29 src/nodes.md:51 src/nodes.md:54
@@ -124,13 +150,20 @@ msgid ""
 "Scenic uses the GStreamer installed on the computer, version 1.26 or later. "
 "Without it, the test pattern, test tone, audio files, GStreamer pipelines "
 "and WebRTC are unavailable; everything else works."
-msgstr "Scenic utilise le GStreamer installé sur l'ordinateur, en version 1.26 ou plus récente. Sans lui, la mire, le signal de test audio, les fichiers audio, les pipelines GStreamer et WebRTC sont indisponibles ; tout le reste fonctionne."
+msgstr ""
+"Scenic utilise le GStreamer installé sur l'ordinateur, en version 1.26 ou "
+"plus récente. Sans lui, la mire, le signal de test audio, les fichiers "
+"audio, les pipelines GStreamer et WebRTC sont indisponibles ; tout le reste "
+"fonctionne."
 
 #: src/installation.md:15
 msgid ""
 "WebRTC also needs the `rswebrtc` plugin of gst-plugins-rs (`webrtcsink`, "
 "`webrtcsrc`), and H.264 and Opus support. To check an installation:"
-msgstr "WebRTC demande aussi le greffon `rswebrtc` de gst-plugins-rs (`webrtcsink`, `webrtcsrc`), ainsi que la prise en charge de H.264 et d'Opus. Pour vérifier une installation :"
+msgstr ""
+"WebRTC demande aussi le greffon `rswebrtc` de gst-plugins-rs (`webrtcsink`, "
+"`webrtcsrc`), ainsi que la prise en charge de H.264 et d'Opus. Pour vérifier "
+"une installation :"
 
 #: src/installation.md:22
 msgid ""
@@ -138,7 +171,11 @@ msgid ""
 "(https://gstreamer.freedesktop.org/download/). It installs "
 "`GStreamer.framework` in `/Library/Frameworks`, where Scenic finds it, and "
 "includes WebRTC and H.264."
-msgstr "**macOS :** installez le paquet _runtime_ de [gstreamer.freedesktop.org](https://gstreamer.freedesktop.org/download/). Il installe `GStreamer.framework` dans `/Library/Frameworks`, où Scenic le trouve, et inclut WebRTC et H.264."
+msgstr ""
+"**macOS :** installez le paquet _runtime_ de [gstreamer.freedesktop.org]"
+"(https://gstreamer.freedesktop.org/download/). Il installe "
+"`GStreamer.framework` dans `/Library/Frameworks`, où Scenic le trouve, et "
+"inclut WebRTC et H.264."
 
 #: src/installation.md:26
 msgid ""
@@ -146,7 +183,11 @@ msgid ""
 "complete set of plugins, then add its `bin` folder (for instance `C:"
 "\\Program Files\\gstreamer\\1.0\\msvc_x86_64\\bin`) to the `PATH` "
 "environment variable, so that Scenic finds it."
-msgstr "**Windows :** installez le _runtime MSVC 64 bits_ depuis la même page, avec l'ensemble complet des greffons, puis ajoutez son dossier `bin` (par exemple `C:\\Program Files\\gstreamer\\1.0\\msvc_x86_64\\bin`) à la variable d'environnement `PATH`, pour que Scenic le trouve."
+msgstr ""
+"**Windows :** installez le _runtime MSVC 64 bits_ depuis la même page, avec "
+"l'ensemble complet des greffons, puis ajoutez son dossier `bin` (par exemple "
+"`C:\\Program Files\\gstreamer\\1.0\\msvc_x86_64\\bin`) à la variable "
+"d'environnement `PATH`, pour que Scenic le trouve."
 
 #: src/installation.md:30
 msgid ""
@@ -155,7 +196,12 @@ msgid ""
 "`gstreamer1.0-libav`). WebRTC needs gst-plugins-rs, which not every "
 "distribution packages; it can be built from source, or used from a GStreamer "
 "build that includes it."
-msgstr "**Linux :** installez GStreamer et ses greffons depuis votre distribution (paquets tels que `gstreamer1.0-plugins-base`, `-good`, `-bad`, `-ugly` et `gstreamer1.0-libav`). WebRTC demande gst-plugins-rs, que toutes les distributions ne fournissent pas ; on peut le compiler, ou utiliser une version de GStreamer qui l'inclut."
+msgstr ""
+"**Linux :** installez GStreamer et ses greffons depuis votre distribution "
+"(paquets tels que `gstreamer1.0-plugins-base`, `-good`, `-bad`, `-ugly` et "
+"`gstreamer1.0-libav`). WebRTC demande gst-plugins-rs, que toutes les "
+"distributions ne fournissent pas ; on peut le compiler, ou utiliser une "
+"version de GStreamer qui l'inclut."
 
 #: src/installation.md:36
 msgid "NDI®"
@@ -165,7 +211,9 @@ msgstr ""
 msgid ""
 "The NDI® source and destination need the NDI runtime, from [ndi.video]"
 "(https://ndi.video/tools/)."
-msgstr "La source et la destination NDI® demandent le runtime NDI, disponible sur [ndi.video](https://ndi.video/tools/)."
+msgstr ""
+"La source et la destination NDI® demandent le runtime NDI, disponible sur "
+"[ndi.video](https://ndi.video/tools/)."
 
 #: src/installation.md:41
 msgid "From source"
@@ -185,34 +233,50 @@ msgid ""
 "category. Some types are created at once; others first ask for a few "
 "settings, such as a file, a URL or a stream name. Enumerated devices "
 "(cameras, NDI® sources, audio devices) are listed by name."
-msgstr "**+ Sources** et **+ Destinations** ouvrent des menus de types de nœuds, groupés par catégorie. Certains types sont créés immédiatement ; d'autres demandent d'abord quelques réglages, comme un fichier, une URL ou un nom de flux. Les appareils détectés (caméras, sources NDI®, périphériques audio) sont listés par leur nom."
+msgstr ""
+"**+ Sources** et **+ Destinations** ouvrent des menus de types de nœuds, "
+"groupés par catégorie. Certains types sont créés immédiatement ; d'autres "
+"demandent d'abord quelques réglages, comme un fichier, une URL ou un nom de "
+"flux. Les appareils détectés (caméras, sources NDI®, périphériques audio) "
+"sont listés par leur nom."
 
 #: src/usage.md:10
 msgid ""
 "Sources are rows and destinations are columns. Click a cell to connect a "
 "source to a destination, and click it again to disconnect them. A source can "
 "feed any number of destinations:"
-msgstr "Les sources sont les lignes et les destinations les colonnes. Cliquez sur une case pour connecter une source à une destination, et cliquez à nouveau pour les déconnecter. Une source peut alimenter autant de destinations que voulu :"
+msgstr ""
+"Les sources sont les lignes et les destinations les colonnes. Cliquez sur "
+"une case pour connecter une source à une destination, et cliquez à nouveau "
+"pour les déconnecter. Une source peut alimenter autant de destinations que "
+"voulu :"
 
 #: src/usage.md:14
 msgid ""
 "**Video:** up to eight sources connected to one video destination are "
 "composited."
-msgstr "**Vidéo :** jusqu'à huit sources connectées à une même destination vidéo sont composées."
+msgstr ""
+"**Vidéo :** jusqu'à huit sources connectées à une même destination vidéo "
+"sont composées."
 
 #: src/usage.md:16
 msgid "**Audio:** the sources connected to one audio destination are mixed."
-msgstr "**Audio :** les sources connectées à une même destination audio sont mixées."
+msgstr ""
+"**Audio :** les sources connectées à une même destination audio sont mixées."
 
 #: src/usage.md:17
 msgid ""
 "**Data:** messages are forwarded, converted between OSC, MIDI and raw bytes "
 "as each end requires."
-msgstr "**Données :** les messages sont transmis, convertis entre OSC, MIDI et octets bruts selon ce qu'attend chaque extrémité."
+msgstr ""
+"**Données :** les messages sont transmis, convertis entre OSC, MIDI et "
+"octets bruts selon ce qu'attend chaque extrémité."
 
 #: src/usage.md:20
 msgid "Each node has a header with its name and, for video, a live thumbnail."
-msgstr "Chaque nœud a un en-tête avec son nom et, pour la vidéo, une vignette en direct."
+msgstr ""
+"Chaque nœud a un en-tête avec son nom et, pour la vidéo, une vignette en "
+"direct."
 
 #: src/usage.md:22
 msgid "**Preview** (⤢): a large view of the source."
@@ -238,19 +302,26 @@ msgstr "L'inspecteur montre le nœud sélectionné :"
 msgid ""
 "**Settings:** what the node was created with (file, address, stream name…). "
 "Changing them rebuilds the node; its connections are kept."
-msgstr "**Réglages :** ce avec quoi le nœud a été créé (fichier, adresse, nom de flux…). Les modifier reconstruit le nœud ; ses connexions sont conservées."
+msgstr ""
+"**Réglages :** ce avec quoi le nœud a été créé (fichier, adresse, nom de "
+"flux…). Les modifier reconstruit le nœud ; ses connexions sont conservées."
 
 #: src/usage.md:32
 msgid ""
 "**Device:** properties of the underlying device that can change live, such "
 "as an encoder's bitrate."
-msgstr "**Périphérique :** les propriétés du périphérique sous-jacent modifiables en direct, comme le débit d'un encodeur."
+msgstr ""
+"**Périphérique :** les propriétés du périphérique sous-jacent modifiables en "
+"direct, comme le débit d'un encodeur."
 
 #: src/usage.md:34
 msgid ""
 "**Controls:** the node's processing: colour adjustments, crop and geometry "
 "for video, gain for audio. Each slider gesture is one undo step."
-msgstr "**Contrôles :** le traitement du nœud : réglages de couleur, recadrage et géométrie pour la vidéo, gain pour l'audio. Chaque geste sur un curseur est une étape d'annulation."
+msgstr ""
+"**Contrôles :** le traitement du nœud : réglages de couleur, recadrage et "
+"géométrie pour la vidéo, gain pour l'audio. Chaque geste sur un curseur est "
+"une étape d'annulation."
 
 #: src/usage.md:37
 msgid "Scenes"
@@ -258,7 +329,9 @@ msgstr "Scènes"
 
 #: src/usage.md:39
 msgid "The tabs above the matrix are scenes, each a set of connections."
-msgstr "Les onglets au-dessus de la matrice sont les scènes, chacune un ensemble de connexions."
+msgstr ""
+"Les onglets au-dessus de la matrice sont les scènes, chacune un ensemble de "
+"connexions."
 
 #: src/usage.md:41
 msgid "Click a tab to switch to its connections."
@@ -270,7 +343,8 @@ msgstr "Double-cliquez sur un onglet pour le renommer."
 
 #: src/usage.md:43
 msgid "**+** adds a scene, starting with no connections; **✕** removes one."
-msgstr "**+** ajoute une scène, sans connexion au départ ; **✕** en supprime une."
+msgstr ""
+"**+** ajoute une scène, sans connexion au départ ; **✕** en supprime une."
 
 #: src/usage.md:45
 msgid "Switching scenes changes only the connections; the nodes stay."
@@ -285,11 +359,16 @@ msgid ""
 "The **Session** menu saves and loads sessions. A session holds the nodes, "
 "their settings and controls, the connections and the scenes. **Ctrl+S** "
 "(**⌘S** on macOS) saves the current session."
-msgstr "Le menu **Session** enregistre et charge les sessions. Une session contient les nœuds, leurs réglages et contrôles, les connexions et les scènes. **Ctrl+S** (**⌘S** sur macOS) enregistre la session courante."
+msgstr ""
+"Le menu **Session** enregistre et charge les sessions. Une session contient "
+"les nœuds, leurs réglages et contrôles, les connexions et les scènes. "
+"**Ctrl+S** (**⌘S** sur macOS) enregistre la session courante."
 
 #: src/usage.md:53
 msgid "Sessions are stored in `Documents/Scenic/sessions` in your home folder."
-msgstr "Les sessions sont rangées dans `Documents/Scenic/sessions`, dans votre dossier personnel."
+msgstr ""
+"Les sessions sont rangées dans `Documents/Scenic/sessions`, dans votre "
+"dossier personnel."
 
 #: src/usage.md:55
 msgid "Undo"
@@ -301,7 +380,11 @@ msgid ""
 "switching scenes, moving a control) can be undone and redone with the "
 "system's shortcuts (**Ctrl+Z** and **Ctrl+Shift+Z** or **Ctrl+Y**; **⌘Z** "
 "and **⇧⌘Z** on macOS), or with the arrows of the toolbar."
-msgstr "Chaque changement (créer, supprimer ou reconfigurer un nœud, connecter, changer de scène, bouger un contrôle) peut être annulé et rétabli avec les raccourcis du système (**Ctrl+Z** et **Ctrl+Maj+Z** ou **Ctrl+Y** ; **⌘Z** et **⇧⌘Z** sur macOS), ou avec les flèches de la barre d'outils."
+msgstr ""
+"Chaque changement (créer, supprimer ou reconfigurer un nœud, connecter, "
+"changer de scène, bouger un contrôle) peut être annulé et rétabli avec les "
+"raccourcis du système (**Ctrl+Z** et **Ctrl+Maj+Z** ou **Ctrl+Y** ; **⌘Z** "
+"et **⇧⌘Z** sur macOS), ou avec les flèches de la barre d'outils."
 
 #: src/usage.md:62
 msgid "Settings"
@@ -312,7 +395,10 @@ msgid ""
 "The **Settings** page holds the interface language, the thumbnails, and the "
 "[telepresence](telepresence.md) settings. They are kept in the user's "
 "configuration folder:"
-msgstr "La page **Réglages** contient la langue de l'interface, les vignettes et les réglages de [téléprésence](telepresence.md). Ils sont conservés dans le dossier de configuration de l'utilisateur :"
+msgstr ""
+"La page **Réglages** contient la langue de l'interface, les vignettes et les "
+"réglages de [téléprésence](telepresence.md). Ils sont conservés dans le "
+"dossier de configuration de l'utilisateur :"
 
 #: src/usage.md:68
 msgid "System"
@@ -351,7 +437,9 @@ msgstr ""
 msgid ""
 "The status bar shows the number of nodes and connections and, on Linux, the "
 "CPU, memory and network load."
-msgstr "La barre d'état montre le nombre de nœuds et de connexions et, sur Linux, la charge du processeur, de la mémoire et du réseau."
+msgstr ""
+"La barre d'état montre le nombre de nœuds et de connexions et, sur Linux, la "
+"charge du processeur, de la mémoire et du réseau."
 
 #: src/telepresence.md:3
 msgid ""
@@ -360,13 +448,21 @@ msgid ""
 "plugins-rs's `gst-webrtc-signalling-server`, as Scenic 5, aiguille and the "
 "`gstwebrtc-api` web client do. Media then flows directly between peers, or "
 "through a TURN server when they cannot reach each other."
-msgstr "Scenic échange de l'audio et de la vidéo avec des postes distants par WebRTC. Les postes se trouvent par un **serveur de signalisation**, qui parle le protocole de `gst-webrtc-signalling-server` de gst-plugins-rs, comme Scenic 5, aiguille et le client web `gstwebrtc-api`. Les médias circulent ensuite directement entre les postes, ou par un serveur TURN quand ils ne peuvent pas se joindre."
+msgstr ""
+"Scenic échange de l'audio et de la vidéo avec des postes distants par "
+"WebRTC. Les postes se trouvent par un **serveur de signalisation**, qui "
+"parle le protocole de `gst-webrtc-signalling-server` de gst-plugins-rs, "
+"comme Scenic 5, aiguille et le client web `gstwebrtc-api`. Les médias "
+"circulent ensuite directement entre les postes, ou par un serveur TURN quand "
+"ils ne peuvent pas se joindre."
 
 #: src/telepresence.md:9
 msgid ""
 "WebRTC needs GStreamer 1.26 or later with gst-plugins-rs; see [Installation]"
 "(installation.md)."
-msgstr "WebRTC demande GStreamer 1.26 ou plus récent avec gst-plugins-rs ; voir [Installation](installation.md)."
+msgstr ""
+"WebRTC demande GStreamer 1.26 ou plus récent avec gst-plugins-rs ; voir "
+"[Installation](installation.md)."
 
 #: src/telepresence.md:12
 msgid "Connecting"
@@ -374,13 +470,17 @@ msgstr "Se connecter"
 
 #: src/telepresence.md:14
 msgid "Run a signalling server, or get the address of one:"
-msgstr "Lancez un serveur de signalisation, ou obtenez l'adresse d'un serveur :"
+msgstr ""
+"Lancez un serveur de signalisation, ou obtenez l'adresse d'un serveur :"
 
 #: src/telepresence.md:20
 msgid ""
 "In **Settings**, set the **Signalling server** (e.g. `ws://"
 "192.168.1.20:8443`) and a **Peer name**, which other peers see."
-msgstr "Dans **Réglages**, indiquez le **Serveur de signalisation** (par exemple `ws://192.168.1.20:8443`) et un **Nom du poste**, que voient les autres postes."
+msgstr ""
+"Dans **Réglages**, indiquez le **Serveur de signalisation** (par exemple "
+"`ws://192.168.1.20:8443`) et un **Nom du poste**, que voient les autres "
+"postes."
 
 #: src/telepresence.md:22
 msgid "Open the **Peers** panel and click **Connect**."
@@ -396,7 +496,11 @@ msgid ""
 "matrix. Whatever is connected to it is sent to the peers that subscribe. The "
 "**WebRTC Publish** destinations of the **+ Destinations** menu do the same, "
 "with a stream name of your choice."
-msgstr "Sous **Publier**, **Vidéo** et **Audio** ajoutent chacun une destination à la matrice. Ce qui y est connecté est envoyé aux postes abonnés. Les destinations **Publier en WebRTC** du menu **+ Destinations** font de même, avec un nom de flux de votre choix."
+msgstr ""
+"Sous **Publier**, **Vidéo** et **Audio** ajoutent chacun une destination à "
+"la matrice. Ce qui y est connecté est envoyé aux postes abonnés. Les "
+"destinations **Publier en WebRTC** du menu **+ Destinations** font de même, "
+"avec un nom de flux de votre choix."
 
 #: src/telepresence.md:31
 msgid "Video is sent as H.264 and audio as stereo Opus."
@@ -410,7 +514,9 @@ msgstr "S'abonner"
 msgid ""
 "The **Peers** panel lists the streams published on the server. **+** on a "
 "stream adds it to the matrix as a source."
-msgstr "Le panneau **Postes** liste les flux publiés sur le serveur. **+** sur un flux l'ajoute à la matrice comme source."
+msgstr ""
+"Le panneau **Postes** liste les flux publiés sur le serveur. **+** sur un "
+"flux l'ajoute à la matrice comme source."
 
 #: src/telepresence.md:38
 msgid "STUN and TURN"
@@ -418,7 +524,9 @@ msgstr "STUN et TURN"
 
 #: src/telepresence.md:40
 msgid "When peers are on different networks, set these in **Settings**:"
-msgstr "Quand les postes sont sur des réseaux différents, renseignez ceci dans **Réglages** :"
+msgstr ""
+"Quand les postes sont sur des réseaux différents, renseignez ceci dans "
+"**Réglages** :"
 
 #: src/telepresence.md:42
 msgid "Setting"
@@ -442,7 +550,8 @@ msgstr ""
 
 #: src/telepresence.md:44
 msgid "Empty: GStreamer's default, `stun://stun.l.google.com:19302`"
-msgstr "Vide : la valeur par défaut de GStreamer, `stun://stun.l.google.com:19302`"
+msgstr ""
+"Vide : la valeur par défaut de GStreamer, `stun://stun.l.google.com:19302`"
 
 #: src/telepresence.md:45
 msgid "TURN server"
@@ -465,7 +574,10 @@ msgid ""
 "They apply to WebRTC nodes created afterwards; to apply them to existing "
 "nodes, recreate them or reload the session. The credentials are stored in "
 "the settings file, never in sessions."
-msgstr "Ils s'appliquent aux nœuds WebRTC créés ensuite ; pour les appliquer aux nœuds existants, recréez-les ou rechargez la session. Les identifiants sont conservés dans le fichier de réglages, jamais dans les sessions."
+msgstr ""
+"Ils s'appliquent aux nœuds WebRTC créés ensuite ; pour les appliquer aux "
+"nœuds existants, recréez-les ou rechargez la session. Les identifiants sont "
+"conservés dans le fichier de réglages, jamais dans les sessions."
 
 #: src/telepresence.md:52
 msgid "Limits"
@@ -475,11 +587,25 @@ msgstr "Limites"
 msgid ""
 "The signalling server is not authenticated: anyone who can reach it can list "
 "and watch the streams. Run it on a trusted network."
-msgstr "Le serveur de signalisation n'est pas authentifié : quiconque peut le joindre peut lister et regarder les flux. Faites-le tourner sur un réseau de confiance."
+msgstr ""
+"Le serveur de signalisation n'est pas authentifié : quiconque peut le "
+"joindre peut lister et regarder les flux. Faites-le tourner sur un réseau de "
+"confiance."
 
 #: src/telepresence.md:56
 msgid "Only static TURN credentials are supported."
 msgstr "Seuls les identifiants TURN fixes sont pris en charge."
+
+#: src/telepresence.md:57
+msgid ""
+"The **Peers** panel lists streams from a plain `ws://host:port` signalling "
+"server. WebRTC nodes created by hand (the **WebRTC Publish** destinations) "
+"accept any signalling address, `wss://` and paths included."
+msgstr ""
+"Le panneau **Postes** liste les flux d'un serveur de signalisation en "
+"`ws://hôte:port` simple. Les nœuds WebRTC créés à la main (les destinations "
+"**Publier en WebRTC**) acceptent toute adresse de signalisation, `wss://` et "
+"chemins compris."
 
 #: src/browser.md:3
 msgid ""
@@ -487,7 +613,11 @@ msgid ""
 "browser/index.html` of the repository is a complete viewer, a single file "
 "with no dependency. It works with any producer on a signalling server, not "
 "only Scenic."
-msgstr "N'importe quel navigateur web peut regarder les publications WebRTC de Scenic : la page `demo/browser/index.html` du dépôt est un lecteur complet, en un seul fichier sans dépendance. Elle fonctionne avec tout producteur d'un serveur de signalisation, pas seulement Scenic."
+msgstr ""
+"N'importe quel navigateur web peut regarder les publications WebRTC de "
+"Scenic : la page `demo/browser/index.html` du dépôt est un lecteur complet, "
+"en un seul fichier sans dépendance. Elle fonctionne avec tout producteur "
+"d'un serveur de signalisation, pas seulement Scenic."
 
 #: src/browser.md:8
 msgid "The demo"
@@ -504,13 +634,21 @@ msgid ""
 "audio`. Open the address it prints, `http://127.0.0.1:8080/`, click "
 "**Connect**, then **Watch** on each stream. Video starts muted, as browsers "
 "require; the audio player has its own controls."
-msgstr "Ceci lance un serveur de signalisation, sert la page du lecteur, et démarre Scenic avec une mire et un signal de test publiés sous les noms `scenic-video` et `scenic-audio`. Ouvrez l'adresse affichée, `http://127.0.0.1:8080/`, cliquez sur **Connect**, puis sur **Watch** pour chaque flux. La vidéo démarre en sourdine, comme l'exigent les navigateurs ; le lecteur audio a ses propres contrôles."
+msgstr ""
+"Ceci lance un serveur de signalisation, sert la page du lecteur, et démarre "
+"Scenic avec une mire et un signal de test publiés sous les noms `scenic-"
+"video` et `scenic-audio`. Ouvrez l'adresse affichée, `http://127.0.0.1:8080/"
+"`, cliquez sur **Connect**, puis sur **Watch** pour chaque flux. La vidéo "
+"démarre en sourdine, comme l'exigent les navigateurs ; le lecteur audio a "
+"ses propres contrôles."
 
 #: src/browser.md:22
 msgid ""
 "The matrix stays live: connect a camera to _Publish scenic-video_ and the "
 "browser shows it."
-msgstr "La matrice reste active : connectez une caméra à _Publier scenic-video_ et le navigateur l'affiche."
+msgstr ""
+"La matrice reste active : connectez une caméra à _Publier scenic-video_ et "
+"le navigateur l'affiche."
 
 #: src/browser.md:25
 msgid "Option"
@@ -528,7 +666,9 @@ msgstr ""
 msgid ""
 "listen on every interface, so other machines can watch; prints one address "
 "per interface"
-msgstr "écoute sur toutes les interfaces, pour que d'autres machines puissent regarder ; affiche une adresse par interface"
+msgstr ""
+"écoute sur toutes les interfaces, pour que d'autres machines puissent "
+"regarder ; affiche une adresse par interface"
 
 #: src/browser.md:28
 msgid "`--turn`"
@@ -538,7 +678,9 @@ msgstr ""
 msgid ""
 "also start a TURN server (coturn) with a demo account, and relay all media "
 "through it"
-msgstr "lance aussi un serveur TURN (coturn) avec un compte de démonstration, et relaie tous les médias par lui"
+msgstr ""
+"lance aussi un serveur TURN (coturn) avec un compte de démonstration, et "
+"relaie tous les médias par lui"
 
 #: src/browser.md:29
 msgid "`--check`"
@@ -548,20 +690,27 @@ msgstr ""
 msgid ""
 "automated run, with Scenic on a virtual display and a headless Chrome; exits "
 "0 once the page plays both streams"
-msgstr "exécution automatique, avec Scenic sur un écran virtuel et un Chrome sans interface ; se termine avec le code 0 quand la page lit les deux flux"
+msgstr ""
+"exécution automatique, avec Scenic sur un écran virtuel et un Chrome sans "
+"interface ; se termine avec le code 0 quand la page lit les deux flux"
 
 #: src/browser.md:31
 msgid ""
 "The options combine. `--turn` needs coturn (`turnserver`). Environment "
 "variables: `SIGNALLER_PORT` (8443), `HTTP_PORT` (8080), `TURN_PORT` (3478), "
 "`TURNSERVER`, `CHROME`."
-msgstr "Les options se combinent. `--turn` demande coturn (`turnserver`). Variables d'environnement : `SIGNALLER_PORT` (8443), `HTTP_PORT` (8080), `TURN_PORT` (3478), `TURNSERVER`, `CHROME`."
+msgstr ""
+"Les options se combinent. `--turn` demande coturn (`turnserver`). Variables "
+"d'environnement : `SIGNALLER_PORT` (8443), `HTTP_PORT` (8080), `TURN_PORT` "
+"(3478), `TURNSERVER`, `CHROME`."
 
 #: src/browser.md:35
 msgid ""
 "The browser must decode H.264 in WebRTC: Chrome, Chromium, Edge, Safari, or "
 "Firefox with its OpenH264 plugin."
-msgstr "Le navigateur doit décoder le H.264 en WebRTC : Chrome, Chromium, Edge, Safari, ou Firefox avec son greffon OpenH264."
+msgstr ""
+"Le navigateur doit décoder le H.264 en WebRTC : Chrome, Chromium, Edge, "
+"Safari, ou Firefox avec son greffon OpenH264."
 
 #: src/browser.md:38
 msgid "The viewer page"
@@ -573,7 +722,12 @@ msgid ""
 "otherwise. Under each stream it shows the codec, resolution, frame rate, "
 "bitrate and network path: `host` for a direct local address, `srflx` for an "
 "address seen through NAT, `relay` for the TURN server."
-msgstr "La page se connecte au port 8443 de l'hôte qui l'a servie, sauf indication contraire. Sous chaque flux, elle montre le codec, la résolution, la fréquence d'images, le débit et le chemin réseau : `host` pour une adresse locale directe, `srflx` pour une adresse vue à travers un NAT, `relay` pour le serveur TURN."
+msgstr ""
+"La page se connecte au port 8443 de l'hôte qui l'a servie, sauf indication "
+"contraire. Sous chaque flux, elle montre le codec, la résolution, la "
+"fréquence d'images, le débit et le chemin réseau : `host` pour une adresse "
+"locale directe, `srflx` pour une adresse vue à travers un NAT, `relay` pour "
+"le serveur TURN."
 
 #: src/browser.md:45
 msgid "URL parameter"
@@ -625,7 +779,11 @@ msgid ""
 "signalling port (8443) and, for media, UDP ports chosen during the "
 "connection. With `--turn`, add the TURN port (3478, UDP and TCP) and the "
 "relay ports (49160–49200, UDP)."
-msgstr "L'autre machine doit joindre celle-ci sur le port de la page (8080), le port de signalisation (8443) et, pour les médias, des ports UDP choisis pendant la connexion. Avec `--turn`, ajoutez le port TURN (3478, UDP et TCP) et les ports de relais (49160–49200, UDP)."
+msgstr ""
+"L'autre machine doit joindre celle-ci sur le port de la page (8080), le port "
+"de signalisation (8443) et, pour les médias, des ports UDP choisis pendant "
+"la connexion. Avec `--turn`, ajoutez le port TURN (3478, UDP et TCP) et les "
+"ports de relais (49160–49200, UDP)."
 
 #: src/browser.md:60
 msgid "Symptom"
@@ -673,14 +831,20 @@ msgstr "Pas de son"
 
 #: src/browser.md:66
 msgid "press play: browsers block audible autoplay"
-msgstr "appuyez sur lecture : les navigateurs bloquent la lecture automatique avec son"
+msgstr ""
+"appuyez sur lecture : les navigateurs bloquent la lecture automatique avec "
+"son"
 
 #: src/nodes.md:3
 msgid ""
 "Types marked _GStreamer_ need GStreamer installed (see [Installation]"
 "(installation.md)); _WebRTC_ also needs gst-plugins-rs. NDI® types need the "
 "NDI runtime. Types limited to some systems only appear in the menus there."
-msgstr "Les types marqués _GStreamer_ demandent GStreamer (voir [Installation](installation.md)) ; _WebRTC_ demande aussi gst-plugins-rs. Les types NDI® demandent le runtime NDI. Les types limités à certains systèmes n'apparaissent dans les menus que sur ceux-ci."
+msgstr ""
+"Les types marqués _GStreamer_ demandent GStreamer (voir [Installation]"
+"(installation.md)) ; _WebRTC_ demande aussi gst-plugins-rs. Les types NDI® "
+"demandent le runtime NDI. Les types limités à certains systèmes "
+"n'apparaissent dans les menus que sur ceux-ci."
 
 #: src/nodes.md:8
 msgid "Sources"
@@ -947,7 +1111,15 @@ msgid ""
 "the OSC message `/midi/1/note/60 100`, control change 7 is `/midi/1/cc/7`, "
 "and so on for `aftertouch`, `program`, `pressure` and `bend`. `/midi/raw` "
 "carries raw MIDI bytes."
-msgstr "Les nœuds de données transportent des messages, en octets bruts, OSC ou MIDI selon leur réglage **Contenu**. Entre une source et une destination de contenus différents, les messages sont convertis selon la correspondance usuelle, `/midi/<canal>/<événement>[/<numéro>] <valeur>` : la note MIDI 60 de vélocité 100 sur le canal 1 devient le message OSC `/midi/1/note/60 100`, le contrôleur 7 devient `/midi/1/cc/7`, et de même pour `aftertouch`, `program`, `pressure` et `bend`. `/midi/raw` transporte des octets MIDI bruts."
+msgstr ""
+"Les nœuds de données transportent des messages, en octets bruts, OSC ou MIDI "
+"selon leur réglage **Contenu**. Entre une source et une destination de "
+"contenus différents, les messages sont convertis selon la correspondance "
+"usuelle, `/midi/<canal>/<événement>[/<numéro>] <valeur>` : la note MIDI 60 "
+"de vélocité 100 sur le canal 1 devient le message OSC `/midi/1/note/60 100`, "
+"le contrôleur 7 devient `/midi/1/cc/7`, et de même pour `aftertouch`, "
+"`program`, `pressure` et `bend`. `/midi/raw` transporte des octets MIDI "
+"bruts."
 
 #: src/development.md:3
 msgid ""
@@ -955,7 +1127,11 @@ msgid ""
 "driving the ossia score engine through score's QML API. There is no C++ to "
 "build; you need an ossia score binary with the `score-addon-ndi` and `score-"
 "addon-ltc` addons."
-msgstr "Scenic est entièrement en QML : une interface (`qml/Main.qml`) et un module (`qml/Scenic/`) qui pilotent le moteur ossia score par son API QML. Il n'y a pas de C++ à compiler ; il faut un binaire d'ossia score avec les extensions `score-addon-ndi` et `score-addon-ltc`."
+msgstr ""
+"Scenic est entièrement en QML : une interface (`qml/Main.qml`) et un module "
+"(`qml/Scenic/`) qui pilotent le moteur ossia score par son API QML. Il n'y a "
+"pas de C++ à compiler ; il faut un binaire d'ossia score avec les extensions "
+"`score-addon-ndi` et `score-addon-ltc`."
 
 #: src/development.md:8
 msgid "Running from a checkout"
@@ -989,13 +1165,18 @@ msgstr ""
 msgid ""
 "a GStreamer build to use instead of the system's, given as its prefix (`bin/"
 "`, `lib/`, `libexec/`): for instance one with gst-plugins-rs"
-msgstr "une version de GStreamer à utiliser à la place de celle du système, désignée par son préfixe (`bin/`, `lib/`, `libexec/`) : par exemple une version avec gst-plugins-rs"
+msgstr ""
+"une version de GStreamer à utiliser à la place de celle du système, désignée "
+"par son préfixe (`bin/`, `lib/`, `libexec/`) : par exemple une version avec "
+"gst-plugins-rs"
 
 #: src/development.md:19
 msgid ""
 "`./run.sh --debug` opens score's own editor beside the interface, which "
 "shows the graph the stores build."
-msgstr "`./run.sh --debug` ouvre l'éditeur de score à côté de l'interface, ce qui montre le graphe construit par les stores."
+msgstr ""
+"`./run.sh --debug` ouvre l'éditeur de score à côté de l'interface, ce qui "
+"montre le graphe construit par les stores."
 
 #: src/development.md:22
 msgid "Layout"
@@ -1025,7 +1206,9 @@ msgstr ""
 msgid ""
 "state: nodes, connections, scenes, sessions, settings, telepresence, data "
 "bridges, undo"
-msgstr "l'état : nœuds, connexions, scènes, sessions, réglages, téléprésence, ponts de données, annulation"
+msgstr ""
+"l'état : nœuds, connexions, scènes, sessions, réglages, téléprésence, ponts "
+"de données, annulation"
 
 #: src/development.md:28
 msgid "`qml/Scenic/Views/`, `Components/`"
@@ -1081,7 +1264,12 @@ msgid ""
 "node a device and a chain of processes ending in a _hub_, and score cables "
 "between hubs for the connections. Every change goes through score's command "
 "stack, which gives undo and redo."
-msgstr "Les stores construisent tout à l'exécution dans un document score vide : pour chaque nœud, un périphérique et une chaîne de processus terminée par un _hub_, et des câbles score entre les hubs pour les connexions. Chaque changement passe par la pile de commandes de score, qui fournit l'annulation et le rétablissement."
+msgstr ""
+"Les stores construisent tout à l'exécution dans un document score vide : "
+"pour chaque nœud, un périphérique et une chaîne de processus terminée par un "
+"_hub_, et des câbles score entre les hubs pour les connexions. Chaque "
+"changement passe par la pile de commandes de score, qui fournit l'annulation "
+"et le rétablissement."
 
 #: src/development.md:40
 msgid "Adding a node type"
@@ -1091,7 +1279,9 @@ msgstr "Ajouter un type de nœud"
 msgid ""
 "Add a file to `qml/Scenic/Nodes/`; the catalog loads every file there. A "
 "type is a `NodeType`:"
-msgstr "Ajoutez un fichier dans `qml/Scenic/Nodes/` ; le catalogue charge tous les fichiers de ce dossier. Un type est un `NodeType` :"
+msgstr ""
+"Ajoutez un fichier dans `qml/Scenic/Nodes/` ; le catalogue charge tous les "
+"fichiers de ce dossier. Un type est un `NodeType` :"
 
 #: src/development.md:45
 msgid ""
@@ -1127,19 +1317,25 @@ msgstr "Options par plateforme"
 msgid ""
 "`platforms: [\"linux\", \"osx\"]` on a type limits it to those systems "
 "(`Qt.platform.os` values); elsewhere it is absent from the menus."
-msgstr "`platforms: [\"linux\", \"osx\"]` sur un type le limite à ces systèmes (valeurs de `Qt.platform.os`) ; ailleurs, il est absent des menus."
+msgstr ""
+"`platforms: [\"linux\", \"osx\"]` sur un type le limite à ces systèmes "
+"(valeurs de `Qt.platform.os`) ; ailleurs, il est absent des menus."
 
 #: src/development.md:67
 msgid ""
 "The same `platforms` key on a field, or on an enum option, limits that field "
 "or option."
-msgstr "La même clé `platforms` sur un champ, ou sur une option d'énumération, limite ce champ ou cette option."
+msgstr ""
+"La même clé `platforms` sur un champ, ou sur une option d'énumération, "
+"limite ce champ ou cette option."
 
 #: src/development.md:69
 msgid ""
 "`byPlatform({ windows: …, osx: …, default: … })` picks a value per system, "
 "for defaults or option lists:"
-msgstr "`byPlatform({ windows: …, osx: …, default: … })` choisit une valeur par système, pour des valeurs par défaut ou des listes d'options :"
+msgstr ""
+"`byPlatform({ windows: …, osx: …, default: … })` choisit une valeur par "
+"système, pour des valeurs par défaut ou des listes d'options :"
 
 #: src/development.md:72
 msgid ""
@@ -1154,7 +1350,10 @@ msgstr ""
 msgid ""
 "Code that reads a type's fields goes through `NodeCatalog.fieldsOf(recipe)`, "
 "which applies the field and option filters."
-msgstr "Le code qui lit les champs d'un type passe par `NodeCatalog.fieldsOf(recipe)`, qui applique les filtres de champs et d'options."
+msgstr ""
+"Le code qui lit les champs d'un type passe par "
+"`NodeCatalog.fieldsOf(recipe)`, qui applique les filtres de champs et "
+"d'options."
 
 #: src/development.md:80
 msgid "Translations"
@@ -1164,7 +1363,9 @@ msgstr "Traductions"
 msgid ""
 "Interface strings go through `Translations.t(\"English text\")`; the French "
 "strings are in `qml/Scenic/Translations.qml`."
-msgstr "Les textes de l'interface passent par `Translations.t(\"English text\")` ; les textes français sont dans `qml/Scenic/Translations.qml`."
+msgstr ""
+"Les textes de l'interface passent par `Translations.t(\"English text\")` ; "
+"les textes français sont dans `qml/Scenic/Translations.qml`."
 
 #: src/development.md:85
 msgid "Tests"
@@ -1174,7 +1375,10 @@ msgstr "Tests"
 msgid ""
 "`tools/run-tests.sh` runs every suite. Suites that render use a private Xvfb "
 "display, never the desktop; the others run headless."
-msgstr "`tools/run-tests.sh` lance toutes les suites. Celles qui font un rendu utilisent un écran Xvfb privé, jamais le bureau ; les autres tournent sans écran."
+msgstr ""
+"`tools/run-tests.sh` lance toutes les suites. Celles qui font un rendu "
+"utilisent un écran Xvfb privé, jamais le bureau ; les autres tournent sans "
+"écran."
 
 #: src/development.md:90
 msgid "Suite"
@@ -1200,7 +1404,10 @@ msgstr ""
 msgid ""
 "the node catalog, a seeded random sequence of store operations with "
 "invariants checked after each one, and session round trips"
-msgstr "le catalogue de nœuds, une suite aléatoire reproductible d'opérations sur les stores avec des invariants vérifiés après chacune, et des allers-retours de session"
+msgstr ""
+"le catalogue de nœuds, une suite aléatoire reproductible d'opérations sur "
+"les stores avec des invariants vérifiés après chacune, et des allers-retours "
+"de session"
 
 #: src/development.md:94
 msgid "`proto`"
@@ -1210,7 +1417,9 @@ msgstr ""
 msgid ""
 "every node type against what score's devices accept, routing rules, and "
 "creation of every type in the engine"
-msgstr "chaque type de nœud face à ce qu'acceptent les périphériques de score, les règles de routage, et la création de chaque type dans le moteur"
+msgstr ""
+"chaque type de nœud face à ce qu'acceptent les périphériques de score, les "
+"règles de routage, et la création de chaque type dans le moteur"
 
 #: src/development.md:95
 msgid "`bridges`"
@@ -1218,7 +1427,9 @@ msgstr ""
 
 #: src/development.md:95
 msgid "data nodes over real sockets: codecs, MIDI/OSC conversion, sessions"
-msgstr "les nœuds de données sur de vraies sockets : codecs, conversion MIDI/OSC, sessions"
+msgstr ""
+"les nœuds de données sur de vraies sockets : codecs, conversion MIDI/OSC, "
+"sessions"
 
 #: src/development.md:96
 msgid "`stores`"
@@ -1235,7 +1446,8 @@ msgstr ""
 #: src/development.md:97
 msgid ""
 "discovery, subscription and publication through a local signalling server"
-msgstr "découverte, abonnement et publication par un serveur de signalisation local"
+msgstr ""
+"découverte, abonnement et publication par un serveur de signalisation local"
 
 #: src/development.md:98
 msgid "`media`"
@@ -1243,7 +1455,8 @@ msgstr ""
 
 #: src/development.md:98
 msgid "recording, shmdata and SRT outputs, checked on what they produce"
-msgstr "enregistrement, sorties shmdata et SRT, vérifiés sur ce qu'ils produisent"
+msgstr ""
+"enregistrement, sorties shmdata et SRT, vérifiés sur ce qu'ils produisent"
 
 #: src/development.md:99
 msgid "`routing`"
@@ -1253,7 +1466,9 @@ msgstr ""
 msgid ""
 "rendered video and audio through the matrix, checked pixel by pixel and "
 "sample by sample"
-msgstr "vidéo et audio rendus à travers la matrice, vérifiés pixel par pixel et échantillon par échantillon"
+msgstr ""
+"vidéo et audio rendus à travers la matrice, vérifiés pixel par pixel et "
+"échantillon par échantillon"
 
 #: src/development.md:100
 msgid "`x11`"
@@ -1271,7 +1486,9 @@ msgstr ""
 msgid ""
 "every source and destination type, with known content checked by external "
 "tools"
-msgstr "chaque type de source et de destination, avec un contenu connu vérifié par des outils externes"
+msgstr ""
+"chaque type de source et de destination, avec un contenu connu vérifié par "
+"des outils externes"
 
 #: src/development.md:103
 msgid ""
@@ -1283,7 +1500,15 @@ msgid ""
 "link` and a `v4l2loopback` device labelled `scenic-test`. A shmdata "
 "GStreamer plugin that is not installed can be named with "
 "`SCENIC_SHMDATA_GST`, sh4lt's `shflow` with `SCENIC_SHFLOW`."
-msgstr "`tools/test-io.py` peut tourner seul : `-k MOTIF` choisit des cas, `--list` les liste, `--roundtrip` enregistre et recharge aussi la session avant de vérifier à nouveau. Un cas dont un prérequis manque (un élément GStreamer, un périphérique, PipeWire, le runtime NDI, X11) indique `SKIP` avec la raison. Les prises vidéo demandent `gst-launch-1.0` ; certains cas utilisent aussi `ffmpeg`, `xdotool`, `pw-link` et un périphérique `v4l2loopback` nommé `scenic-test`. Un greffon GStreamer shmdata non installé peut être indiqué avec `SCENIC_SHMDATA_GST`, le `shflow` de sh4lt avec `SCENIC_SHFLOW`."
+msgstr ""
+"`tools/test-io.py` peut tourner seul : `-k MOTIF` choisit des cas, `--list` "
+"les liste, `--roundtrip` enregistre et recharge aussi la session avant de "
+"vérifier à nouveau. Un cas dont un prérequis manque (un élément GStreamer, "
+"un périphérique, PipeWire, le runtime NDI, X11) indique `SKIP` avec la "
+"raison. Les prises vidéo demandent `gst-launch-1.0` ; certains cas utilisent "
+"aussi `ffmpeg`, `xdotool`, `pw-link` et un périphérique `v4l2loopback` nommé "
+"`scenic-test`. Un greffon GStreamer shmdata non installé peut être indiqué "
+"avec `SCENIC_SHMDATA_GST`, le `shflow` de sh4lt avec `SCENIC_SHFLOW`."
 
 #: src/development.md:112
 msgid "Documentation"
@@ -1294,7 +1519,10 @@ msgid ""
 "The documentation is written in English in `docs/src/`; its French "
 "translation is `docs/po/fr.po`, through [mdbook-i18n-helpers](https://"
 "github.com/google/mdbook-i18n-helpers). To build both languages:"
-msgstr "La documentation est écrite en anglais dans `docs/src/` ; sa traduction française est `docs/po/fr.po`, grâce à [mdbook-i18n-helpers](https://github.com/google/mdbook-i18n-helpers). Pour construire les deux langues :"
+msgstr ""
+"La documentation est écrite en anglais dans `docs/src/` ; sa traduction "
+"française est `docs/po/fr.po`, grâce à [mdbook-i18n-helpers](https://"
+"github.com/google/mdbook-i18n-helpers). Pour construire les deux langues :"
 
 #: src/development.md:121
 msgid "en"
@@ -1308,7 +1536,9 @@ msgstr ""
 msgid ""
 "After changing the English text, update the translation template and merge "
 "it into the French file:"
-msgstr "Après avoir modifié le texte anglais, mettez à jour le modèle de traduction et fusionnez-le dans le fichier français :"
+msgstr ""
+"Après avoir modifié le texte anglais, mettez à jour le modèle de traduction "
+"et fusionnez-le dans le fichier français :"
 
 #: src/development.md:130
 msgid "'{\"xgettext\": {}}'"
