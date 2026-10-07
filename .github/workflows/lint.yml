@@ -1,0 +1,82 @@
+name: Lint
+
+# Static checks that need no ossia score build. The suites that need one run in
+# build.yml, against the engine it builds.
+
+on:
+  push:
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  qmllint:
+    name: qmllint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.9.1'
+          modules: 'qtshadertools'
+          cache: true
+
+      # tools/lint.sh finds qmllint through QT_ROOT_DIR, set by the step above.
+      - name: qmllint
+        run: ./tools/lint.sh
+
+  shell:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          shellcheck -s sh -S warning tools/*.sh run.sh
+
+  catalog:
+    name: node catalog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Every Nodes/*.qml declares a unique kind, a role, a media type and a
+      # label, and names only known platforms.
+      - name: check Nodes/*.qml
+        run: |
+          python3 - <<'PY'
+          import glob, re, sys
+          platforms = {"linux", "osx", "windows", "android", "ios", "wasm", "unix"}
+          bad, kinds = [], {}
+          files = sorted(glob.glob('qml/Scenic/Nodes/*.qml'))
+          if not files:
+              sys.exit('no node files found')
+          for f in files:
+              s = open(f).read()
+              def field(name):
+                  m = re.search(name + r'\s*:\s*"([^"]*)"', s)
+                  return m.group(1) if m else None
+              kind, role, media = field('kind'), field('role'), field('mediaType')
+              if not kind:
+                  bad.append(f'{f}: no kind')
+              if role not in ('source', 'destination'):
+                  bad.append(f'{f}: bad role {role!r}')
+              if media not in ('video', 'audio', 'data'):
+                  bad.append(f'{f}: bad mediaType {media!r}')
+              if 'label:' not in s:
+                  bad.append(f'{f}: no label')
+              for m in re.finditer(r'platforms\s*:\s*\[([^\]]*)\]', s):
+                  for p in re.findall(r'"([^"]*)"', m.group(1)):
+                      if p not in platforms:
+                          bad.append(f'{f}: unknown platform {p!r}')
+              if kind:
+                  if kind in kinds:
+                      bad.append(f'{f}: kind {kind!r} already used by {kinds[kind]}')
+                  kinds[kind] = f
+          print(f'checked {len(files)} node files, {len(bad)} problem(s)')
+          for b in bad:
+              print('FAIL:', b)
+          sys.exit(1 if bad else 0)
+          PY

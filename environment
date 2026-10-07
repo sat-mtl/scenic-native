@@ -1,0 +1,3 @@
+# Runtime environment of the packaged application.
+# Scenic does not use score's library browser: skip indexing it at startup.
+export SCORE_DISABLE_LIBRARY=1

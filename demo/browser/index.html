@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scenic Viewer</title>
+<style>
+  :root {
+    --bg: #1d2024; --surface: #272b30; --item: #343a40; --text: #e4e6e8;
+    --dim: #9aa1a8; --accent: #3fb6a8; --error: #e0605a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 16px; background: var(--bg); color: var(--text);
+    font: 14px/1.4 system-ui, sans-serif;
+  }
+  h1 { margin: 0 0 12px; font-size: 18px; color: var(--accent); }
+  header { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  input {
+    flex: 1 1 260px; min-width: 0; padding: 6px 8px; border: 1px solid var(--item);
+    border-radius: 4px; background: var(--surface); color: var(--text);
+  }
+  button {
+    padding: 6px 12px; border: 0; border-radius: 4px; cursor: pointer;
+    background: var(--accent); color: #102020; font-weight: 600;
+  }
+  button.secondary { background: var(--item); color: var(--text); }
+  #status { color: var(--dim); }
+  #status.error { color: var(--error); }
+  h2 { margin: 20px 0 8px; font-size: 15px; }
+  #producers { display: flex; flex-direction: column; gap: 6px; }
+  .producer {
+    display: flex; align-items: center; gap: 10px; padding: 8px;
+    background: var(--surface); border-radius: 4px;
+  }
+  .producer .names { flex: 1; min-width: 0; }
+  .producer .peer, .empty { color: var(--dim); font-size: 12px; }
+  #tiles {
+    display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+  }
+  .tile { background: var(--surface); border-radius: 4px; padding: 8px; }
+  .tile video { width: 100%; background: #000; border-radius: 2px; display: block; }
+  .tile audio { width: 100%; }
+  .tile .title { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .tile .stats { color: var(--dim); font: 12px ui-monospace, monospace; margin-top: 6px; }
+</style>
+</head>
+<body>
+<h1>Scenic Viewer</h1>
+<header>
+  <input id="url" aria-label="Signalling server">
+  <button id="connect">Connect</button>
+  <span id="status">Not connected</span>
+</header>
+
+<h2>Streams on this server</h2>
+<div id="producers"><div class="empty">None yet.</div></div>
+
+<h2>Watching</h2>
+<div id="tiles"></div>
+
+<script>
+// Receive-only client of the gst-webrtc-signalling protocol (the protocol of
+// gst-plugins-rs's gst-webrtc-signalling-server, webrtcsink and webrtcsrc):
+//   welcome {peerId}                         server -> us
+//   setPeerStatus {roles: ["listener"]}      us -> server: producer events
+//   list -> list {producers: [{id, meta}]}
+//   peerStatusChanged {peerId, roles, meta}  a producer appeared or left
+//   startSession {peerId} -> sessionStarted {peerId, sessionId}
+//   peer {sessionId, sdp | ice}              both ways; the producer offers
+//   endSession {sessionId}                   both ways
+//
+// Query parameters:
+//   signaller=ws://host:port   signalling server; connect at once
+//   autoplay=1                 watch every stream as it appears, and log
+//                              "[viewer]" lines (read by demo-browser.sh --check)
+//   stun=stun:host:port        STUN server
+//   turn=turn:host:port        TURN server, with user= and pass=
+//   relay=1                    use the TURN server only: every packet relayed
+const params = new URLSearchParams(location.search);
+const autoplay = params.get("autoplay") === "1";
+const iceServers = [];
+if (params.get("stun"))
+  iceServers.push({ urls: params.get("stun") });
+if (params.get("turn"))
+  iceServers.push({ urls: params.get("turn"),
+                    username: params.get("user") ?? "", credential: params.get("pass") ?? "" });
+const rtcConfig = { iceServers, iceTransportPolicy: params.get("relay") === "1" ? "relay" : "all" };
+const urlField = document.getElementById("url");
+const statusLabel = document.getElementById("status");
+urlField.value = params.get("signaller")
+  ?? `${location.protocol === "https:" ? "wss" : "ws"}://${location.hostname || "127.0.0.1"}:8443`;
+
+let ws = null;
+const producers = new Map();   // producer id -> meta
+const sessions = new Map();    // session id -> session
+const pending = new Map();     // producer id -> session waiting for its id
+
+const log = (...args) => console.log("[viewer]", ...args);
+
+function setStatus(text, error) {
+  statusLabel.textContent = text;
+  statusLabel.classList.toggle("error", !!error);
+}
+
+function send(msg) {
+  if (ws && ws.readyState === WebSocket.OPEN)
+    ws.send(JSON.stringify(msg));
+}
+
+function connect() {
+  disconnect();
+  setStatus("Connecting…");
+  ws = new WebSocket(urlField.value);
+  ws.onmessage = (e) => handle(JSON.parse(e.data));
+  ws.onclose = () => {
+    setStatus("Not connected");
+    producers.clear();
+    for (const s of [...sessions.values(), ...pending.values()])
+      closeSession(s, false);
+    renderProducers();
+    document.getElementById("connect").textContent = "Connect";
+  };
+  ws.onerror = () => {
+    setStatus("Cannot reach " + urlField.value, true);
+    log("cannot reach", urlField.value);
+  };
+}
+
+function disconnect() {
+  if (ws) {
+    ws.onclose();
+    ws.onclose = null;
+    ws.close();
+    ws = null;
+  }
+}
+
+function handle(msg) {
+  switch (msg.type) {
+  case "welcome":
+    setStatus("Connected as " + msg.peerId);
+    document.getElementById("connect").textContent = "Disconnect";
+    log("connected", msg.peerId);
+    send({ type: "setPeerStatus", roles: ["listener"], meta: { name: "browser viewer" } });
+    send({ type: "list" });
+    break;
+  case "list":
+    producers.clear();
+    for (const p of msg.producers ?? [])
+      producers.set(p.id, p.meta ?? {});
+    renderProducers();
+    break;
+  case "peerStatusChanged":
+    if ((msg.roles ?? []).includes("producer"))
+      producers.set(msg.peerId, msg.meta ?? {});
+    else
+      producers.delete(msg.peerId);
+    renderProducers();
+    break;
+  case "sessionStarted": {
+    const s = pending.get(msg.peerId);
+    if (!s) break;
+    pending.delete(msg.peerId);
+    s.id = msg.sessionId;
+    sessions.set(s.id, s);
+    break;
+  }
+  case "peer": {
+    const s = sessions.get(msg.sessionId);
+    if (s) onPeerMessage(s, msg);
+    break;
+  }
+  case "endSession": {
+    const s = sessions.get(msg.sessionId);
+    if (s) closeSession(s, false);
+    break;
+  }
+  case "error":
+    setStatus("Server error: " + msg.details, true);
+    log("error", msg.details);
+    break;
+  }
+}
+
+function renderProducers() {
+  const box = document.getElementById("producers");
+  box.replaceChildren();
+  if (producers.size === 0) {
+    box.innerHTML = '<div class="empty">None yet.</div>';
+    return;
+  }
+  for (const [id, meta] of producers) {
+    const row = document.createElement("div");
+    row.className = "producer";
+    const names = document.createElement("div");
+    names.className = "names";
+    names.textContent = (meta.media_type === "audio" ? "♫ " : "▣ ") + (meta.name || id);
+    const peer = document.createElement("div");
+    peer.className = "peer";
+    peer.textContent = meta.peer_name ? "from " + meta.peer_name : id;
+    names.append(peer);
+    const watching = [...sessions.values(), ...pending.values()].some(s => s.producerId === id);
+    const button = document.createElement("button");
+    button.textContent = watching ? "Watching" : "Watch";
+    button.disabled = watching;
+    button.onclick = () => watch(id);
+    row.append(names, button);
+    box.append(row);
+    if (autoplay && !watching)
+      watch(id);
+  }
+}
+
+function watch(producerId) {
+  const meta = producers.get(producerId) ?? {};
+  const s = {
+    producerId, meta, id: null, candidates: [],
+    pc: new RTCPeerConnection(rtcConfig),
+    tile: makeTile(meta.name || producerId),
+  };
+  s.tile.stop.onclick = () => closeSession(s, true);
+  s.pc.ontrack = (e) => {
+    const media = e.track.kind === "video" ? s.tile.video : s.tile.audio;
+    media.hidden = false;
+    media.srcObject = e.streams[0] ?? new MediaStream([e.track]);
+    media.play().catch(err => log("play blocked", err.message));
+  };
+  s.pc.onicecandidate = (e) => {
+    if (e.candidate?.candidate && s.id)
+      send({ type: "peer", sessionId: s.id,
+             ice: { candidate: e.candidate.candidate, sdpMLineIndex: e.candidate.sdpMLineIndex } });
+  };
+  s.pc.onconnectionstatechange = () => {
+    log(meta.name, "connection", s.pc.connectionState);
+    if (s.pc.connectionState === "failed")
+      s.tile.stats.textContent = "Connection failed (see the README section on networks)";
+  };
+  s.timer = setInterval(() => updateStats(s), 1000);
+  pending.set(producerId, s);
+  send({ type: "startSession", peerId: producerId });
+  renderProducers();
+}
+
+async function onPeerMessage(s, msg) {
+  try {
+    if (msg.sdp) {
+      await s.pc.setRemoteDescription(msg.sdp);
+      for (const c of s.candidates)
+        await s.pc.addIceCandidate(c);
+      s.candidates = [];
+      if (msg.sdp.type === "offer") {
+        await s.pc.setLocalDescription(await s.pc.createAnswer());
+        send({ type: "peer", sessionId: s.id,
+               sdp: { type: "answer", sdp: s.pc.localDescription.sdp } });
+      }
+    } else if (msg.ice) {
+      if (s.pc.remoteDescription)
+        await s.pc.addIceCandidate(msg.ice);
+      else
+        s.candidates.push(msg.ice);
+    }
+  } catch (err) {
+    log("negotiation failed", err.message);
+    s.tile.stats.textContent = "Negotiation failed: " + err.message;
+  }
+}
+
+function closeSession(s, notify) {
+  if (notify && s.id)
+    send({ type: "endSession", sessionId: s.id });
+  clearInterval(s.timer);
+  s.pc.close();
+  s.tile.root.remove();
+  sessions.delete(s.id);
+  pending.delete(s.producerId);
+  renderProducers();
+}
+
+function makeTile(name) {
+  const root = document.createElement("div");
+  root.className = "tile";
+  root.innerHTML = `<div class="title"><span></span><button class="secondary">Stop</button></div>
+    <video autoplay playsinline muted hidden></video><audio controls hidden></audio>
+    <div class="stats">Negotiating…</div>`;
+  root.querySelector(".title span").textContent = name;
+  document.getElementById("tiles").append(root);
+  return {
+    root, stop: root.querySelector("button"), video: root.querySelector("video"),
+    audio: root.querySelector("audio"), stats: root.querySelector(".stats"),
+  };
+}
+
+async function updateStats(s) {
+  const report = await s.pc.getStats();
+  const parts = [];
+  report.forEach(r => {
+    if (r.type !== "inbound-rtp") return;
+    const codec = report.get(r.codecId)?.mimeType?.split("/")[1] ?? "?";
+    const kbps = s.lastBytes?.[r.id] !== undefined
+      ? Math.round((r.bytesReceived - s.lastBytes[r.id]) * 8 / 1000) : 0;
+    (s.lastBytes ??= {})[r.id] = r.bytesReceived;
+    if (r.kind === "video")
+      parts.push(`video ${codec} ${r.frameWidth ?? 0}x${r.frameHeight ?? 0}`
+                 + ` ${Math.round(r.framesPerSecond ?? 0)} fps, ${kbps} kb/s,`
+                 + ` frames=${r.framesDecoded ?? 0}`);
+    else
+      parts.push(`audio ${codec} ${kbps} kb/s, packets=${r.packetsReceived ?? 0}`);
+  });
+  const path = selectedPath(report);
+  if (path)
+    parts.push(path);
+  if (parts.length > 0) {
+    s.tile.stats.textContent = parts.join(" · ");
+    if (autoplay)
+      log("stats", s.meta.name, parts.join(" · "));
+  }
+  // What tools/demo-browser.sh --check waits for: two seconds of decoded
+  // video, or of received audio.
+  report.forEach(r => {
+    if (r.type !== "inbound-rtp" || s.received?.[r.kind]) return;
+    const enough = r.kind === "video"
+      ? r.framesDecoded >= 60 && s.tile.video.videoWidth > 0
+      : r.packetsReceived >= 100;
+    if (enough) {
+      (s.received ??= {})[r.kind] = true;
+      log("RECEIVING", r.kind, s.meta.name,
+          r.kind === "video" ? `${s.tile.video.videoWidth}x${s.tile.video.videoHeight}` : "",
+          path ?? "");
+    }
+  });
+}
+
+// How the media travels, from the candidate pair in use: "host" is a direct
+// local address, "srflx" an address seen through NAT (STUN), "relay" the
+// TURN server.
+function selectedPath(report) {
+  let pairId = null;
+  report.forEach(r => { if (r.type === "transport" && r.selectedCandidatePairId) pairId = r.selectedCandidatePairId; });
+  const pair = pairId ? report.get(pairId) : null;
+  if (!pair) return null;
+  const local = report.get(pair.localCandidateId), remote = report.get(pair.remoteCandidateId);
+  return `path ${local?.candidateType ?? "?"} → ${remote?.candidateType ?? "?"}`;
+}
+
+document.getElementById("connect").onclick = () => ws ? disconnect() : connect();
+if (autoplay || params.has("signaller"))
+  connect();
+</script>
+</body>
+</html>

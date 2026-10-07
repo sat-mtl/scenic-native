@@ -1,0 +1,17 @@
+[book]
+title = "Scenic Native"
+description = "Documentation for Scenic Native, a telepresence and media-routing application built on ossia score"
+authors = ["Société des Arts Technologiques"]
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+
+[preprocessor.gettext]
+after = ["links"]
+
+[output.html]
+default-theme = "auto"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/sat-mtl/scenic-native"

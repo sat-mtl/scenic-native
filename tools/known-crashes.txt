@@ -1,0 +1,8 @@
+# Crashes at process exit that are known engine bugs rather than Scenic
+# regressions. A crash whose stack trace matches nothing here fails the suite.
+#
+# Format: short name|extended regex, matched against the crash stack trace
+# (module and symbol names, as systemd-coredump records them).
+#
+# Keep this list as short as evidence allows, and delete an entry once the
+# engine is fixed.

@@ -1,0 +1,34 @@
+module Scenic
+singleton Style 1.0 Style.qml
+singleton Translations 1.0 Translations.qml
+singleton Uuids 1.0 Uuids.qml
+singleton Pipelines 1.0 Pipelines.qml
+NodeType 1.0 Components/NodeType.qml
+NodeConfig 1.0 Components/NodeConfig.qml
+singleton NodeCatalog 1.0 Models/NodeCatalog.qml
+singleton NodeStore 1.0 Stores/NodeStore.qml
+singleton MatrixStore 1.0 Stores/MatrixStore.qml
+singleton SceneStore 1.0 Stores/SceneStore.qml
+singleton SessionStore 1.0 Stores/SessionStore.qml
+singleton HistoryStore 1.0 Stores/HistoryStore.qml
+singleton NotificationStore 1.0 Stores/NotificationStore.qml
+singleton SettingsStore 1.0 Stores/SettingsStore.qml
+singleton StatsStore 1.0 Stores/StatsStore.qml
+singleton WebRtcStore 1.0 Stores/WebRtcStore.qml
+singleton BridgeStore 1.0 Stores/BridgeStore.qml
+MatrixView 1.0 Views/MatrixView.qml
+PreviewOverlay 1.0 Views/PreviewOverlay.qml
+InspectorDrawer 1.0 Views/InspectorDrawer.qml
+SettingsPage 1.0 Views/SettingsPage.qml
+HelpPage 1.0 Views/HelpPage.qml
+PeersPanel 1.0 Views/PeersPanel.qml
+NodeHead 1.0 Components/NodeHead.qml
+SceneTabBar 1.0 Components/SceneTabBar.qml
+CreateNodeDialog 1.0 Components/CreateNodeDialog.qml
+ToastOverlay 1.0 Components/ToastOverlay.qml
+NavRail 1.0 Components/NavRail.qml
+StatusBar 1.0 Components/StatusBar.qml
+ScenicMenuButton 1.0 Components/ScenicMenuButton.qml
+FieldEditor 1.0 Components/FieldEditor.qml
+NodeCategoryMenu 1.0 Components/NodeCategoryMenu.qml
+DeviceList 1.0 Components/DeviceList.qml

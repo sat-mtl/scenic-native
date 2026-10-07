@@ -1,0 +1,25 @@
+# packaging and documentation output
+packages/
+build/
+docs/book/
+docs/po/messages.pot
+site/
+
+# Python
+__pycache__/
+
+# editors and OS
+*.user
+*.autosave
+*.swp
+*~
+.vscode/
+.idea/
+.qtcreator/
+.DS_Store
+Thumbs.db
+
+# QML caches, coverage
+*.qmlc
+*.jsc
+*.profraw
