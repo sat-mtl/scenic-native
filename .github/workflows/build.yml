@@ -57,6 +57,10 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           set -eu
+          # libraries the AppImage takes from the host, as its startup check lists
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libbluetooth3 libegl1 libopengl0 libv4l-0 \
+            libxcb-shape0 libxcb-xkb1 libxcb-xinput0 libxkbcommon-x11-0
           img=$(find score-src/staging -maxdepth 1 -name '*.AppImage' | head -1)
           test -n "$img"
           chmod +x "$img"
