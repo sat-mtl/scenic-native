@@ -14,7 +14,6 @@ QtObject {
         showThumbnails && Util.environmentVariable("SCENIC_NO_THUMBS") !== "1"
     property string signallerUri: "ws://127.0.0.1:8443"
     property string peerName: ""
-    property string authToken: ""
     // ICE servers of the WebRTC nodes. An empty STUN server keeps GStreamer's
     // default; an empty TURN server means no relay.
     property string stunServer: ""
@@ -56,7 +55,6 @@ QtObject {
                 showThumbnails = d.showThumbnails ?? showThumbnails
                 signallerUri = d.signallerUri ?? signallerUri
                 peerName = d.peerName ?? peerName
-                authToken = d.authToken ?? authToken
                 stunServer = d.stunServer ?? stunServer
                 turnServer = d.turnServer ?? turnServer
                 turnUser = d.turnUser ?? turnUser
@@ -75,7 +73,7 @@ QtObject {
 
     function save() {
         Util.writeFile(configPath, JSON.stringify({
-            language, showThumbnails, signallerUri, peerName, authToken,
+            language, showThumbnails, signallerUri, peerName,
             stunServer, turnServer, turnUser, turnPassword
         }, null, 1))
         Translations.language = language

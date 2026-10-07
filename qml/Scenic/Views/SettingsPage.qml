@@ -91,23 +91,6 @@ Item {
 
         RowLayout {
             Label {
-                text: Translations.t("Access token")
-                color: Style.text
-                Layout.preferredWidth: 180
-            }
-            TextField {
-                Layout.fillWidth: true
-                echoMode: TextInput.PasswordEchoOnEdit
-                text: SettingsStore.authToken
-                onEditingFinished: {
-                    SettingsStore.authToken = text
-                    SettingsStore.save()
-                }
-            }
-        }
-
-        RowLayout {
-            Label {
                 text: Translations.t("STUN server")
                 color: Style.text
                 Layout.preferredWidth: 180

@@ -1,6 +1,5 @@
 pragma Singleton
 import QtQuick
-import QtWebSockets
 import Scenic
 
 // Client of the gst-webrtc-signalling protocol, as spoken by
@@ -11,39 +10,17 @@ import Scenic
 //   peerStatusChanged {peerId, roles, meta}   server -> client
 // Remote producers can be subscribed to as matrix sources; publishing adds a
 // webrtcsink destination (Nodes/WebrtcPub*.qml).
+//
+// The socket is libossia's WebSocket client, which ships with score: it
+// reaches ws://host:port, without a path, query or TLS. The WebRTC nodes
+// themselves connect with GStreamer, which takes any signalling URI.
 QtObject {
     id: root
 
-    readonly property bool connected: sock.status === WebSocket.Open
+    property bool connected: false
     property string peerId: ""
     property ListModel producers: ListModel {}
-
-    function wsUrl() {
-        let url = SettingsStore.signallerUri
-        const q = []
-        if (SettingsStore.authToken !== "")
-            q.push("auth=" + encodeURIComponent(SettingsStore.authToken))
-        if (q.length > 0)
-            url += "?" + q.join("&")
-        return url
-    }
-
-    property WebSocket sock: WebSocket {
-        id: ws
-        active: false
-        onTextMessageReceived: (msg) => root.handle(msg)
-        onStatusChanged: (status) => {
-            if (status === WebSocket.Open) {
-                NotificationStore.info(Translations.t("Connected") + " — "
-                                       + SettingsStore.signallerUri)
-            } else if (status === WebSocket.Error) {
-                NotificationStore.error(Translations.t("Signalling: ") + ws.errorString)
-            } else if (status === WebSocket.Closed) {
-                root.peerId = ""
-                root.producers.clear()
-            }
-        }
-    }
+    property var sock: null
 
     property Timer refreshTimer: Timer {
         interval: 5000
@@ -52,18 +29,53 @@ QtObject {
         onTriggered: root.send({ type: "list" })
     }
 
+    //! { host, port } of a ws:// URI, or null for one this client cannot reach.
+    function endpoint(uri) {
+        const m = /^ws:\/\/([^\/:?#]+|\[[^\]]+\])(?::(\d+))?\/?$/.exec(String(uri).trim())
+        return m ? { host: m[1].replace(/^\[|\]$/g, ""), port: m[2] ?? "80" } : null
+    }
+
     function connect() {
-        sock.url = wsUrl()
-        sock.active = true
+        disconnect()
+        const ep = endpoint(SettingsStore.signallerUri)
+        if (!ep) {
+            NotificationStore.error(Translations.t("Signalling: ")
+                + Translations.t("the peer list needs a ws://host:port address"))
+            return
+        }
+        sock = Protocols.outboundWS({
+            Transport: { Host: ep.host, Port: ep.port },
+            onOpen: () => {
+                root.connected = true
+                NotificationStore.info(Translations.t("Connected") + " — "
+                                       + SettingsStore.signallerUri)
+            },
+            onClose: () => root.closed(),
+            onError: () => {
+                NotificationStore.error(Translations.t("Signalling: ")
+                    + Translations.t("cannot reach ") + SettingsStore.signallerUri)
+                root.closed()
+            },
+            onTextMessage: msg => root.handle(msg)
+        })
     }
 
     function disconnect() {
-        sock.active = false
+        if (sock)
+            sock.close()
+        closed()
+    }
+
+    function closed() {
+        sock = null
+        connected = false
+        peerId = ""
+        producers.clear()
     }
 
     function send(obj) {
-        if (sock.status === WebSocket.Open)
-            sock.sendTextMessage(JSON.stringify(obj))
+        if (sock && connected)
+            sock.write(JSON.stringify(obj))
     }
 
     function handle(text) {
