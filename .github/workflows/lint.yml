@@ -20,7 +20,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.9.1'
-          modules: 'qtshadertools'
+          modules: 'qtshadertools qtwebsockets'
           cache: true
 
       # tools/lint.sh finds qmllint through QT_ROOT_DIR, set by the step above.
