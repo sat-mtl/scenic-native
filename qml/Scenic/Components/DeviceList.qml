@@ -15,14 +15,23 @@ QtObject {
     //! Enumerate again. The enumerator finds nothing when it first runs, before
     //! the document exists, and does not retry on its own.
     function refresh() {
+        // No deviceType is score's "every protocol known", and it walks them all
+        // in one synchronous pass: on Windows that pass never returns.
+        if (root.deviceType === "")
+            return
         enumerator.enumerate = false
         enumerator.enumerate = true
     }
 
+    // Built inert. `enumerate: true` here is a constant, and QML assigns
+    // constants before bindings, so enumeration would start while deviceType
+    // was still empty -- the unfiltered pass that follows deadlocks the engine.
     property QtObject enumerator: UI.DeviceEnumerator {
         deviceType: root.deviceType
-        enumerate: true
     }
+
+    // deviceType is in place by now, so this is the first filtered enumeration.
+    Component.onCompleted: root.refresh()
 
     property Connections connections: Connections {
         target: root.enumerator
