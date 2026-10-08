@@ -101,6 +101,8 @@ suite stores  check_done "p1auto\] DONE" env SCENIC_SCENARIO="$PWD/tools/scenari
 suite webrtc  check_done "p3auto\].*DONE" ./tools/test-webrtc.sh
 suite media   ./tools/test-media.sh
 suite routing ./tools/test-routing.sh
+# needs a real camera; SKIPs where there is none
+suite camcycle ./tools/test-camera-cycle.sh
 suite x11     ./tools/test-x11.sh
 # every node type end to end, content checked by external tools
 suite io      ./tools/test-io.py
