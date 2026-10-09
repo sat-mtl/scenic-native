@@ -14,9 +14,6 @@ QtObject {
     property bool hidden: false              // not offered in the menus
     property bool enumerate: false           // offered per enumerated device
     property var platforms: []               // Qt.platform.os values; empty = all
-    // Pro-only: offered only when SAT_ADVANCED_IO is set, the suite-wide gate
-    // separating camera/file I/O from NDI / Spout / Syphon.
-    property bool advanced: false
 
     // ---- engine binding ----
     property string protocol: ""             // device protocol uuid
