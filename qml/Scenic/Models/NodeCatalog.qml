@@ -47,8 +47,14 @@ QtObject {
         destinations = nodes.filter(n => n.role === "destination")
     }
 
-    //! Whether a type's protocol exists on this OS.
+    // Set by the pro package's environment-pro. Read once: the catalog is
+    // built at startup and the flag cannot change under a running app.
+    readonly property bool advancedIo: !!Util.environmentVariable("SAT_ADVANCED_IO")
+
+    //! Whether a type's protocol exists on this OS and in this edition.
     function supported(n) {
+        if (n.advanced && !advancedIo)
+            return false
         return n.platforms.length === 0 || n.platforms.indexOf(Qt.platform.os) !== -1
     }
 
