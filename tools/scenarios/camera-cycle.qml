@@ -72,15 +72,15 @@ Item {
                     NodeStore.playbackDesired = true
                 } else if (root.step === 2) {
                     root.pick = root.pickModes()
-                    if (!root.pick) { say("NOCAM"); Qt.exit(0); return }
+                    if (!root.pick) { root.say("NOCAM"); Qt.exit(0); return }
                     root.modes = [root.pick.a, root.pick.b, root.pick.a]
-                    say("cycling " + root.pick.group)
+                    root.say("cycling " + root.pick.group)
                 } else if (root.step >= 3) {
                     const phase = (root.step - 3) % 2
                     if (phase === 0) {
                         root.modeIdx++
                         if (root.modeIdx >= root.modes.length) {
-                            say("DONE")
+                            root.say("DONE")
                             Qt.exit(0)
                             return
                         }
@@ -90,7 +90,7 @@ Item {
                     }
                 }
             } catch (e) {
-                say("EXCEPTION: " + e)
+                root.say("EXCEPTION: " + e)
                 Qt.exit(1)
             }
         }
