@@ -3,7 +3,7 @@ import Scenic
 NodeType {
     kind: "spoutout"
     label: Translations.t("Spout Output")
-    role: "destination"; mediaType: "video"; category: "Video Out"; order: 260; advanced: true
+    role: "destination"; mediaType: "video"; category: "Video Out"; order: 260
     platforms: ["windows"]
     protocol: Uuids.spoutOut
     fields: [{ key: "path", label: Translations.t("Sender name"), def: "Scenic" }]
