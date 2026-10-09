@@ -1,3 +1,10 @@
 # Runtime environment of the packaged application.
 # Scenic does not use score's library browser: skip indexing it at startup.
 export SCORE_DISABLE_LIBRARY=1
+
+# The NDI / Spout / Syphon node types -- inputs and outputs -- are a pro-build
+# feature: see environment-pro, which the "Scenic Native Pro" package is built
+# with. SAT_ADVANCED_IO is the suite-wide name for that gate. Uncommenting this
+# in a development checkout offers them in the node menus too (still
+# platform-filtered: Spout on Windows, Syphon on macOS, NDI everywhere).
+# export SAT_ADVANCED_IO=1

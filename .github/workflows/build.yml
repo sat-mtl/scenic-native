@@ -25,10 +25,13 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux-x86_64
+            artifact-name: linux-x86_64
           - os: macos-latest
             platform: macos-arm
+            artifact-name: macos-arm
           - os: windows-latest
             platform: windows
+            artifact-name: windows
 
     steps:
       - name: Checkout
@@ -86,9 +89,13 @@ jobs:
           path: /tmp/scenic-*.log
           retention-days: 7
 
-      - name: Package
+      # Two packages out of one score build; they differ only in the environment
+      # file, whose SAT_ADVANCED_IO flag offers the NDI / Spout / Syphon node
+      # types. Distinct app-names so the file names differ.
+      - name: Package (basic)
         uses: ossia/actions/package-custom-app@master
         with:
+          output-path: packages
           app-name: "Scenic Native"
           qml-files: "qml"
           score-build-id: ${{ steps.score.outputs.artifact-id }}
@@ -109,11 +116,42 @@ jobs:
           macos-notarize-apple-id: ${{ secrets.MAC_NOTARIZE_APPLE_ID }}
           macos-notarize-password: ${{ secrets.MAC_NOTARIZE_PASSWORD }}
 
-      - name: Upload packages
+      - name: Upload packages (basic)
         uses: actions/upload-artifact@v4
         with:
-          name: scenic-native-${{ matrix.platform }}
-          path: packages/
+          name: scenic-native-${{ matrix.artifact-name }}
+          path: packages/${{ matrix.artifact-file || '' }}
+          retention-days: 30
+
+      - name: Package (pro)
+        uses: ossia/actions/package-custom-app@master
+        with:
+          output-path: packages-pro
+          app-name: "Scenic Native Pro"
+          qml-files: "qml"
+          score-build-id: ${{ steps.score.outputs.artifact-id }}
+          platforms: ${{ matrix.platform }}
+          app-organization: "SAT"
+          app-domain: "sat.qc.ca"
+          app-identifier: "ca.qc.sat.scenic"
+          app-description: "Telepresence and media routing, with NDI / Spout / Syphon I/O"
+          app-environment: environment-pro
+          app-copyright: "Société des Arts Technologiques"
+          app-version: "1.0"
+          app-png: "resources/scenic.png"
+          app-icns: "resources/scenic.icns"
+          app-ico: "resources/scenic.ico"
+          macos-certificate-base64: ${{ secrets.MAC_CERT_B64 }}
+          macos-certificate-password: ${{ secrets.MAC_CERT_PASSWORD }}
+          macos-notarize-team-id: ${{ secrets.MAC_NOTARIZE_TEAM_ID }}
+          macos-notarize-apple-id: ${{ secrets.MAC_NOTARIZE_APPLE_ID }}
+          macos-notarize-password: ${{ secrets.MAC_NOTARIZE_PASSWORD }}
+
+      - name: Upload packages (pro)
+        uses: actions/upload-artifact@v4
+        with:
+          name: scenic-native-pro-${{ matrix.artifact-name }}
+          path: packages-pro/${{ matrix.artifact-file || '' }}
           retention-days: 30
 
   release:

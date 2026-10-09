@@ -1,0 +1,8 @@
+# Runtime environment of the packaged application.
+# Scenic does not use score's library browser: skip indexing it at startup.
+export SCORE_DISABLE_LIBRARY=1
+
+# Pro build: offer the NDI / Spout / Syphon node types in both directions.
+# NodeCatalog.supported() drops the ones the running platform cannot provide,
+# so one flag covers all six. The name is suite-wide, not per-tool.
+export SAT_ADVANCED_IO=1

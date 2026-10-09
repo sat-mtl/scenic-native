@@ -16,6 +16,11 @@ SCORE_BIN="${SCORE_BIN:-$(command -v ossia-score 2>/dev/null || true)}"
 # score built with AddressSanitizer reports Qt symbols defined twice
 export ASAN_OPTIONS="${ASAN_OPTIONS:-detect_odr_violation=0}"
 
+# The suites cover the NDI / Spout / Syphon node types, which the basic edition
+# does not offer: NodeCatalog gates them on this flag, so tests and local runs
+# always see the full node set.
+export SAT_ADVANCED_IO="${SAT_ADVANCED_IO:-1}"
+
 GST_BIN=""
 if [ -n "${SCENIC_GST_SDK:-}" ]; then
     if [ ! -d "$SCENIC_GST_SDK" ]; then
