@@ -23,6 +23,11 @@ Item {
     property int step: 0
     property string lastId: ""
     property var pick: null
+    // A leak may only show after several rounds, which is what the cycle test
+    // appeared to show before its own carry-over was found. Each round is
+    // probed, so the round a leak starts at is visible.
+    property int cycles: parseInt(Util.environmentVariable("SCENIC_RELEASE_CYCLES")) || 1
+    property int round: 0
 
     function say(m) {
         console.log("[release]", m)
@@ -58,23 +63,36 @@ Item {
                     root.pick = root.pickCamera()
                     if (!root.pick) { root.say("NOCAM"); Qt.exit(0); return }
                     root.say("BASELINE " + root.pick.group)
-                } else if (root.step === 4) {
-                    root.say("open " + root.pick.mode.name)
-                    root.lastId = NodeStore.create(
-                        NodeCatalog.recipe("camera"), root.pick.mode.settings,
-                        root.pick.group) ?? ""
-                    if (root.lastId === "") { root.say("OPEN FAILED"); Qt.exit(1); return }
-                    const wid = NodeStore.create(NodeCatalog.recipe("window"))
-                    MatrixStore.connect(root.lastId, wid)
-                    root.say("OPENED " + root.lastId)
-                } else if (root.step === 8) {
-                    root.say("REMOVING " + root.lastId)
-                    NodeStore.remove(root.lastId)
-                    root.lastId = ""
-                    root.say("REMOVED")
-                } else if (root.step === 14) {
-                    root.say("DONE")
-                    Qt.exit(0)
+                } else if (root.step >= 4) {
+                    // Each round is open (1 tick), hold (3), remove (1),
+                    // observe (3): eight ticks, so the prober has several
+                    // seconds in each phase.
+                    const phase = (root.step - 4) % 8
+                    if (phase === 0) {
+                        root.round++
+                        if (root.round > root.cycles) {
+                            root.say("DONE")
+                            Qt.exit(0)
+                            return
+                        }
+                        root.say("open " + root.pick.mode.name)
+                        root.lastId = NodeStore.create(
+                            NodeCatalog.recipe("camera"), root.pick.mode.settings,
+                            root.pick.group) ?? ""
+                        if (root.lastId === "") {
+                            root.say("OPEN FAILED round " + root.round)
+                            Qt.exit(1)
+                            return
+                        }
+                        const wid = NodeStore.create(NodeCatalog.recipe("window"))
+                        MatrixStore.connect(root.lastId, wid)
+                        root.say("OPENED " + root.round + " " + root.lastId)
+                    } else if (phase === 4) {
+                        root.say("REMOVING " + root.lastId)
+                        NodeStore.remove(root.lastId)
+                        root.lastId = ""
+                        root.say("REMOVED " + root.round)
+                    }
                 }
             } catch (e) {
                 root.say("EXCEPTION: " + e)
