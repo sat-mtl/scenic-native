@@ -30,9 +30,15 @@ Item {
 
     // The first camera group offering two distinct resolutions. "Default
     // Camera" is skipped: its negotiated format is not deterministic.
+    // SCENIC_CYCLE_CAM narrows it to a group whose title contains that text,
+    // which two runs need in order to be comparable: enumeration order is not
+    // stable, so "the first group" can be a different camera each time.
     function pickModes() {
+        const want = Util.environmentVariable("SCENIC_CYCLE_CAM")
         for (const g of root.shell.cameraGroups) {
             if (String(g.title).indexOf("Default") === 0)
+                continue
+            if (want !== "" && String(g.title).indexOf(want) < 0)
                 continue
             if (g.items.length < 2)
                 continue
