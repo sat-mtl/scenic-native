@@ -21,7 +21,12 @@ Item {
     property var pick: null
     property string lastId: ""
     property int round: 0
-    property int rounds: parseInt(Util.environmentVariable("SCENIC_ROUNDS")) || 3
+    // An explicit sequence, because alternating modes over three rounds gives
+    // "aba" and the third open then repeats the first mode: "the Nth open
+    // fails" and "re-opening a mode already used fails" are different claims
+    // and that sequence cannot tell them apart. "abb" separates them.
+    property string seq: Util.environmentVariable("SCENIC_SEQ") || "aba"
+    property int rounds: seq.length
     property int gap: parseInt(Util.environmentVariable("SCENIC_GAP")) || 2000
     property int hold: parseInt(Util.environmentVariable("SCENIC_HOLD")) || 2000
 
@@ -46,9 +51,9 @@ Item {
         return null
     }
 
-    // Alternate the two modes so a re-open is a real renegotiation rather than
-    // a no-op, and so no round repeats the mode of the round before it.
-    function modeFor(i) { return (i % 2 === 0) ? root.pick.a : root.pick.b }
+    function modeFor(i) {
+        return root.seq.charAt(i) === "b" ? root.pick.b : root.pick.a
+    }
 
     function doOpen() {
         root.round++
@@ -90,7 +95,7 @@ Item {
                 NodeStore.playbackDesired = true
                 root.pick = root.pickModes()
                 if (!root.pick) { root.say("NOCAM"); Qt.exit(0); return }
-                root.say("cycling " + root.pick.group
+                root.say("cycling " + root.pick.group + " seq=" + root.seq
                          + " gap=" + root.gap + " hold=" + root.hold)
                 startTimer.start()
             } catch (e) { root.say("EXCEPTION: " + e); Qt.exit(1) }
