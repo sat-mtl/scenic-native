@@ -25,10 +25,13 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux-x86_64
+            artifact-name: linux-x86_64
           - os: macos-latest
             platform: macos-arm
+            artifact-name: macos-arm
           - os: windows-latest
             platform: windows
+            artifact-name: windows
 
     steps:
       - name: Checkout
@@ -89,7 +92,8 @@ jobs:
       - name: Package
         uses: ossia/actions/package-custom-app@master
         with:
-          app-name: "Scenic Native"
+          output-path: packages
+          app-name: "Scenic Native Pro"
           qml-files: "qml"
           score-build-id: ${{ steps.score.outputs.artifact-id }}
           platforms: ${{ matrix.platform }}
@@ -112,18 +116,10 @@ jobs:
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
-          name: scenic-native-${{ matrix.platform }}
-          path: packages/
+          name: scenic-native-${{ matrix.artifact-name }}
+          path: packages/${{ matrix.artifact-file || '' }}
           retention-days: 30
 
-  release:
-    name: Release
-    needs: build
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    permissions:
-      contents: write
-    steps:
       - name: Download packages
         uses: actions/download-artifact@v4
         with:
