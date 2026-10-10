@@ -103,6 +103,7 @@ suite media   ./tools/test-media.sh
 suite routing ./tools/test-routing.sh
 # needs a real camera; SKIPs where there is none
 suite camcycle ./tools/test-camera-cycle.sh
+suite camleak  ./tools/test-camera-leak.sh
 suite x11     ./tools/test-x11.sh
 # every node type end to end, content checked by external tools
 suite io      ./tools/test-io.py

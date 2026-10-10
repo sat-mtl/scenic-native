@@ -51,7 +51,7 @@ ApplicationWindow {
         })
         const path = Util.environmentVariable("SCENIC_SCENARIO")
         if (path !== "")
-            scenario.setSource(path, { shell: mainWindow })
+            scenario.setSource(scenarioUrl(path), { shell: mainWindow })
     }
 
     // ---- enumerated devices ----
@@ -292,6 +292,23 @@ ApplicationWindow {
     InspectorDrawer { id: inspector }
 
     PeersPanel { id: peersPanel }
+
+    // SCENIC_SCENARIO holds a filesystem path; Loader.setSource takes a URL. A
+    // POSIX path only works by accident, and "D:\x\y.qml" parses as scheme "d".
+    function scenarioUrl(path) {
+        // Schemes are two characters or more, so a drive letter is not one.
+        if (/^[a-zA-Z][a-zA-Z0-9+.-]+:/.test(path))
+            return path
+        if (!/^([a-zA-Z]:[\\/]|\\\\|\/)/.test(path))
+            return path
+        let p = path.replace(/\\/g, "/")
+        if (p.charAt(0) !== "/")
+            p = "/" + p
+        // encodeURI keeps "/" and ":" but passes "#" and "?" through, and both
+        // are legal in a file name.
+        const enc = encodeURI(p).replace(/#/g, "%23").replace(/\?/g, "%3F")
+        return (enc.startsWith("//") ? "file:" : "file://") + enc
+    }
 
     // Test scenarios (tools/scenarios) run in this window when SCENIC_SCENARIO
     // holds the absolute path of one; see tools/run-tests.sh.

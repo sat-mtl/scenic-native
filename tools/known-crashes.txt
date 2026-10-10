@@ -6,3 +6,10 @@
 #
 # Keep this list as short as evidence allows, and delete an entry once the
 # engine is fixed.
+
+# A static build that links LLVM statically (the local cmake build, not the
+# AppImage) crashes in LLVM's command-line option registry while glibc runs the
+# exit handlers, after the scenario has reported DONE. Reproduced identically on
+# a build with and without the camera-release change, so it is not Scenic's and
+# not score's gfx code.
+llvm-cl-opt-static-dtor|llvm::cl::opt<.*>::~opt|__run_exit_handlers
