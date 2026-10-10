@@ -79,7 +79,14 @@ Item {
                 } else if (root.step === 2) {
                     root.pick = root.pickModes()
                     if (!root.pick) { root.say("NOCAM"); Qt.exit(0); return }
-                    root.modes = [root.pick.a, root.pick.b, root.pick.a]
+                    // The default repeats the first mode, so a failure on the
+                    // third open cannot be told apart from a failure to
+                    // re-open a mode already used. SCENIC_CYCLE_SEQ ("aba",
+                    // "abb", "ab", ...) separates the two.
+                    const seq = Util.environmentVariable("SCENIC_CYCLE_SEQ") || "aba"
+                    root.modes = []
+                    for (const c of seq)
+                        root.modes.push(c === "b" ? root.pick.b : root.pick.a)
                     root.say("cycling " + root.pick.group)
                 } else if (root.step >= 3) {
                     const phase = (root.step - 3) % 2
