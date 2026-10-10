@@ -20,6 +20,7 @@ Item {
     property var shell
     property var pick: null
     property string lastId: ""
+    property string windowId: ""
     property int round: 0
     // An explicit sequence, because alternating modes over three rounds gives
     // "aba" and the third open then repeats the first mode: "the Nth open
@@ -63,8 +64,11 @@ Item {
         root.lastId = NodeStore.create(
             NodeCatalog.recipe("camera"), m.settings, root.pick.group) ?? ""
         if (root.lastId === "") { root.say("OPEN FAILED " + root.round); Qt.exit(1); return }
-        const wid = NodeStore.create(NodeCatalog.recipe("window"))
-        MatrixStore.connect(root.lastId, wid)
+        // One window for the whole run. Creating one per round and never
+        // removing it leaves an output node, a RenderList and a QRhi behind
+        // each time, and that accumulation -- not the camera -- is then what a
+        // later round runs out of.
+        MatrixStore.connect(root.lastId, root.windowId)
         root.say("opened " + root.round + " " + root.lastId)
         holdTimer.interval = root.hold
         holdTimer.start()
@@ -95,8 +99,11 @@ Item {
                 NodeStore.playbackDesired = true
                 root.pick = root.pickModes()
                 if (!root.pick) { root.say("NOCAM"); Qt.exit(0); return }
+                root.windowId = NodeStore.create(NodeCatalog.recipe("window")) ?? ""
+                if (root.windowId === "") { root.say("NO WINDOW"); Qt.exit(1); return }
                 root.say("cycling " + root.pick.group + " seq=" + root.seq
-                         + " gap=" + root.gap + " hold=" + root.hold)
+                         + " gap=" + root.gap + " hold=" + root.hold
+                         + " window=" + root.windowId)
                 startTimer.start()
             } catch (e) { root.say("EXCEPTION: " + e); Qt.exit(1) }
         }
