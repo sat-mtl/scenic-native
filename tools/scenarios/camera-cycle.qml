@@ -18,6 +18,7 @@ Item {
     property var modes: []
     property int modeIdx: -1
     property string lastId: ""
+    property string windowId: ""
 
     // One line per event, flushed as it happens: a crash has to leave behind
     // the step it died on.
@@ -52,8 +53,12 @@ Item {
         root.lastId = NodeStore.create(
             NodeCatalog.recipe("camera"), m.settings, root.pick.group) ?? ""
         if (root.lastId === "") { say("OPEN FAILED"); return }
-        const wid = NodeStore.create(NodeCatalog.recipe("window"))
-        MatrixStore.connect(root.lastId, wid)
+        // One window, reused. A window per round is never removed, so each
+        // round left an output node, a RenderList and a QRhi behind and a later
+        // round ran out of those rather than of camera.
+        if (root.windowId === "")
+            root.windowId = NodeStore.create(NodeCatalog.recipe("window")) ?? ""
+        MatrixStore.connect(root.lastId, root.windowId)
         say("opened " + root.lastId)
     }
 

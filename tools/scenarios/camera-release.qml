@@ -23,6 +23,7 @@ Item {
     property int step: 0
     property string lastId: ""
     property var pick: null
+    property string windowId: ""
     // A leak may only show after several rounds, which is what the cycle test
     // appeared to show before its own carry-over was found. Each round is
     // probed, so the round a leak starts at is visible.
@@ -84,8 +85,10 @@ Item {
                             Qt.exit(1)
                             return
                         }
-                        const wid = NodeStore.create(NodeCatalog.recipe("window"))
-                        MatrixStore.connect(root.lastId, wid)
+                        // One window, reused: see camera-cycle.qml.
+                        if (root.windowId === "")
+                            root.windowId = NodeStore.create(NodeCatalog.recipe("window")) ?? ""
+                        MatrixStore.connect(root.lastId, root.windowId)
                         root.say("OPENED " + root.round + " " + root.lastId)
                     } else if (phase === 4) {
                         root.say("REMOVING " + root.lastId)
