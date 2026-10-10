@@ -17,6 +17,13 @@
 # some devices; a gap counts as failing only if it fails every attempt, so one
 # bad run does not fail the suite.
 #
+# The verdict comes from the app log, not from the scenario. NodeStore.create
+# returns an id whether or not the capture opened, so the scenario's own
+# "opened" marker says nothing about the camera -- measuring it that way made a
+# run where the second open failed and the third succeeded look like the
+# reverse. score reports a failed open as
+# "could not start the camera input", and that is what is counted here.
+#
 # Needs a camera offering two modes. Reports SKIP where there is none.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -74,7 +81,11 @@ attempt() {
     # grep -c prints 0 and exits 1 with no match, so "|| echo 0" would print a
     # second zero and the arithmetic below would see "0 0".
     tried=$(grep -c '^open ' "$LOG" 2>/dev/null); tried=${tried:-0}
-    ok=$(grep -c '^opened ' "$LOG" 2>/dev/null); ok=${ok:-0}
+    # Opens the camera actually refused, as score itself reports them.
+    refused=$(grep -ca 'could not start the camera input' "$OUT" 2>/dev/null)
+    refused=${refused:-0}
+    ok=$((tried - refused))
+    [ "$ok" -lt 0 ] && ok=0
     # A crash is a failure of this gap even if the opens up to it succeeded.
     classify_exit "$RC" "$SINCE" "test-camera-regap-$gap" "$OUT" > /dev/null 2>&1 || ok=-1
     echo "$ok/$tried"

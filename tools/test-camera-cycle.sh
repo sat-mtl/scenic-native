@@ -48,6 +48,15 @@ while [ "$i" -le "$RUNS" ]; do
         exit 0
     fi
 
+    # A refused open is not visible to the scenario: NodeStore.create returns an
+    # id either way, so DONE can be reached with no camera behind any of it.
+    REFUSED=$(grep -ca 'could not start the camera input' "$OUT" 2>/dev/null)
+    REFUSED=${REFUSED:-0}
+    if [ "$REFUSED" -gt 0 ]; then
+        note "FAIL run $i: $REFUSED open(s) refused by the camera"
+        FAIL=1
+    fi
+
     if grep -q DONE "$LOG"; then
         note "PASS run $i (survived $(grep -c '^open ' "$LOG") opens)"
     else
