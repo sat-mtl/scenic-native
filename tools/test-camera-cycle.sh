@@ -16,6 +16,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 cd "$HERE/.." || exit 1
 
 . "$HERE/lib-exit.sh"
+. "$HERE/lib-camera.sh"
 . tools/env.sh
 require_score
 
@@ -36,11 +37,18 @@ while [ "$i" -le "$RUNS" ]; do
     rm -f "$HOME/.config/ossia/failsafe.bit"
     SINCE=$(now_epoch)
 
+    FDS=/tmp/scenic-camera-cycle-$i.fds
+    : > "$FDS"
+
     env QML_IMPORT_PATH="$PWD/qml" QML2_IMPORT_PATH="$PWD/qml" \
         SCENIC_SCENARIO="$PWD/tools/scenarios/camera-cycle.qml" \
         SCENIC_CYCLE_LOG="$LOG" SCENIC_NO_THUMBS=1 \
         timeout 60 "$SCORE_BIN" --ui qml/Main.qml --no-restore \
-        > "$OUT" 2>&1
+        > "$OUT" 2>&1 &
+    runner=$!
+    app=$(camera_app_pid "$runner")
+    sample_camera_fds "$runner" "$app" "$LOG" "$FDS"
+    wait "$runner"
     RC=$?
 
     if grep -q NOCAM "$LOG"; then
@@ -48,27 +56,36 @@ while [ "$i" -le "$RUNS" ]; do
         exit 0
     fi
 
-    # A refused open is not visible to the scenario: NodeStore.create returns an
-    # id either way, so DONE can be reached with no camera behind any of it.
-    REFUSED=$(grep -ca 'could not start the camera input' "$OUT" 2>/dev/null)
-    REFUSED=${REFUSED:-0}
-    if [ "$REFUSED" -gt 0 ]; then
-        note "FAIL run $i: $REFUSED open(s) refused by the camera"
-        FAIL=1
+    # A refused open is invisible to the scenario -- NodeStore.create returns an
+    # id either way -- and invisible in the log too, since no qWarning leaves
+    # the process in --ui mode. So DONE can be reached with no camera behind any
+    # of it. Judge on the descriptors score itself held; see lib-camera.sh.
+    TRIED=$(grep -c '^open ' "$LOG" 2>/dev/null); TRIED=${TRIED:-0}
+    OPENED=$(camera_rounds_opened "$FDS" "$TRIED")
+    RUN_BAD=0
+    if [ "$TRIED" -gt 0 ] && [ "$OPENED" -lt "$TRIED" ]; then
+        note "FAIL run $i: only $OPENED of $TRIED opens actually took the camera"
+        RUN_BAD=1
     fi
 
-    if grep -q DONE "$LOG"; then
-        note "PASS run $i (survived $(grep -c '^open ' "$LOG") opens)"
-    else
+    if ! grep -q DONE "$LOG"; then
         note "FAIL run $i: died at '$(tail -1 "$LOG")' rc=$RC"
         classify_exit "$RC" "$SINCE" || true
-        FAIL=1
+        RUN_BAD=1
     fi
 
     # The leak shows up as the camera staying busy, which is visible before any
     # crash is: worth reporting even on a run that survives.
     if grep -qiE "device already in use|Could not run graph|I/O error" "$OUT"; then
         note "FAIL run $i: capture not released (device busy on re-open)"
+        RUN_BAD=1
+    fi
+
+    # One verdict per run, after every check, so a run cannot be reported as
+    # both PASS and FAIL.
+    if [ "$RUN_BAD" -eq 0 ]; then
+        note "PASS run $i ($OPENED/$TRIED opens took the camera)"
+    else
         FAIL=1
     fi
 

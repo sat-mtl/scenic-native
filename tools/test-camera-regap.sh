@@ -17,12 +17,23 @@
 # some devices; a gap counts as failing only if it fails every attempt, so one
 # bad run does not fail the suite.
 #
-# The verdict comes from the app log, not from the scenario. NodeStore.create
-# returns an id whether or not the capture opened, so the scenario's own
-# "opened" marker says nothing about the camera -- measuring it that way made a
-# run where the second open failed and the third succeeded look like the
-# reverse. score reports a failed open as
-# "could not start the camera input", and that is what is counted here.
+# The verdict comes from the camera handles score itself holds, read out of
+# /proc/<pid>/fd while the scenario runs. Two weaker signals were tried first
+# and both are unusable:
+#
+#   - the scenario's own "opened N" marker: NodeStore.create returns an id
+#     whether or not the capture opened, so it says nothing about the camera;
+#   - score's "could not start the camera input" warning: in --ui mode score
+#     installs no Qt message handler (SafeQApplication only installs one under
+#     SCORE_DEBUG, and the Messages panel that would forward it is not loaded),
+#     so no qWarning or qDebug from any plugin reaches stderr. Measured: with
+#     the camera held by another process for a whole run, every open was
+#     refused and the warning appeared zero times, while the test reported
+#     PASS 3/3.
+#
+# An fd pointing at /dev/video* in score's own process is first-hand evidence
+# that the capture opened, needs no cooperation from Qt, and cannot be confused
+# with another process holding the camera.
 #
 # Needs a camera offering two modes. Reports SKIP where there is none.
 set -u
@@ -30,6 +41,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 cd "$HERE/.." || exit 1
 
 . "$HERE/lib-exit.sh"
+. "$HERE/lib-camera.sh"
 . tools/env.sh
 require_score
 
@@ -60,12 +72,22 @@ attempt() {
     rm -f "$HOME/.config/ossia/failsafe.bit"
     SINCE=$(now_epoch)
 
+    FDS=/tmp/scenic-regap-$gap-$seq-$try.fds
+    : > "$FDS"
+
     env QML_IMPORT_PATH="$PWD/qml" QML2_IMPORT_PATH="$PWD/qml" \
         SCENIC_SCENARIO="$PWD/tools/scenarios/camera-regap.qml" \
         SCENIC_REGAP_LOG="$LOG" SCENIC_GAP="$gap" SCENIC_HOLD=2000 \
         SCENIC_SEQ="$seq" SCENIC_NO_THUMBS=1 \
         timeout 120 "$SCORE_BIN" --ui qml/Main.qml --no-restore \
-        > "$OUT" 2>&1
+        > "$OUT" 2>&1 &
+    runner=$!
+
+    app=$(camera_app_pid "$runner")
+    # Sampled against the round the scenario is in, so a failed open is
+    # attributed to its own round rather than to the run as a whole.
+    sample_camera_fds "$runner" "$app" "$LOG" "$FDS"
+    wait "$runner"
     RC=$?
 
     if grep -q NOCAM "$LOG"; then
@@ -81,11 +103,9 @@ attempt() {
     # grep -c prints 0 and exits 1 with no match, so "|| echo 0" would print a
     # second zero and the arithmetic below would see "0 0".
     tried=$(grep -c '^open ' "$LOG" 2>/dev/null); tried=${tried:-0}
-    # Opens the camera actually refused, as score itself reports them.
-    refused=$(grep -ca 'could not start the camera input' "$OUT" 2>/dev/null)
-    refused=${refused:-0}
-    ok=$((tried - refused))
-    [ "$ok" -lt 0 ] && ok=0
+    # A round counts as opened only if score held a camera descriptor at some
+    # point while that round was the current one.
+    ok=$(camera_rounds_opened "$FDS" "$tried")
     # A crash is a failure of this gap even if the opens up to it succeeded.
     classify_exit "$RC" "$SINCE" "test-camera-regap-$gap" "$OUT" > /dev/null 2>&1 || ok=-1
     echo "$ok/$tried"
