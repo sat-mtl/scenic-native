@@ -18,6 +18,7 @@ Item {
     property var modes: []
     property int modeIdx: -1
     property string lastId: ""
+    property string windowId: ""
 
     // One line per event, flushed as it happens: a crash has to leave behind
     // the step it died on.
@@ -30,9 +31,15 @@ Item {
 
     // The first camera group offering two distinct resolutions. "Default
     // Camera" is skipped: its negotiated format is not deterministic.
+    // SCENIC_CYCLE_CAM narrows it to a group whose title contains that text,
+    // which two runs need in order to be comparable: enumeration order is not
+    // stable, so "the first group" can be a different camera each time.
     function pickModes() {
+        const want = Util.environmentVariable("SCENIC_CYCLE_CAM")
         for (const g of root.shell.cameraGroups) {
             if (String(g.title).indexOf("Default") === 0)
+                continue
+            if (want !== "" && String(g.title).indexOf(want) < 0)
                 continue
             if (g.items.length < 2)
                 continue
@@ -46,8 +53,12 @@ Item {
         root.lastId = NodeStore.create(
             NodeCatalog.recipe("camera"), m.settings, root.pick.group) ?? ""
         if (root.lastId === "") { say("OPEN FAILED"); return }
-        const wid = NodeStore.create(NodeCatalog.recipe("window"))
-        MatrixStore.connect(root.lastId, wid)
+        // One window, reused. A window per round is never removed, so each
+        // round left an output node, a RenderList and a QRhi behind and a later
+        // round ran out of those rather than of camera.
+        if (root.windowId === "")
+            root.windowId = NodeStore.create(NodeCatalog.recipe("window")) ?? ""
+        MatrixStore.connect(root.lastId, root.windowId)
         say("opened " + root.lastId)
     }
 
@@ -73,7 +84,14 @@ Item {
                 } else if (root.step === 2) {
                     root.pick = root.pickModes()
                     if (!root.pick) { root.say("NOCAM"); Qt.exit(0); return }
-                    root.modes = [root.pick.a, root.pick.b, root.pick.a]
+                    // The default repeats the first mode, so a failure on the
+                    // third open cannot be told apart from a failure to
+                    // re-open a mode already used. SCENIC_CYCLE_SEQ ("aba",
+                    // "abb", "ab", ...) separates the two.
+                    const seq = Util.environmentVariable("SCENIC_CYCLE_SEQ") || "aba"
+                    root.modes = []
+                    for (const c of seq)
+                        root.modes.push(c === "b" ? root.pick.b : root.pick.a)
                     root.say("cycling " + root.pick.group)
                 } else if (root.step >= 3) {
                     const phase = (root.step - 3) % 2
