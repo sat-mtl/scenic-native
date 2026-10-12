@@ -7,6 +7,7 @@ NodeType {
     protocol: Uuids.window
     settings: ({})
     addr: name => name + ":/"
+    nameAddr: "/title"
     // live device-tree parameters (written via Device.write)
     deviceParams: [
         { addr: "/position",   label: Translations.t("Position"),   type: "vec2" },

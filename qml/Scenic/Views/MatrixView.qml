@@ -75,32 +75,37 @@ Item {
 
                         // Rotated about (x, y + height). At -60 degrees a
                         // 110px label spans about width/2 + height horizontally,
-                        // which stays within one column.
-                        Label {
-                            text: destHead.model.label
-                            color: destHead.selected ? Style.accent
-                                 : destHead.active ? Style.text : Style.textDim
-                            font.pixelSize: Style.fontSizeSmall
-                            font.bold: true
-                            renderType: Text.QtRendering
-                            rotation: -60
-                            transformOrigin: Item.BottomLeft
-                            x: 10
-                            y: parent.height - height - 16
-                            width: 110
-                            elide: Text.ElideRight
-                        }
-                        Label {
-                            text: destHead.model.typeLabel
-                            color: Style.textDisabled
-                            font.pixelSize: Style.fontSizeSmall - 1
-                            renderType: Text.QtRendering
+                        // which stays within one column. Both lines share one
+                        // transform so that the spacing between them is the
+                        // Column's, not a vertical offset foreshortened by the
+                        // rotation.
+                        Column {
                             rotation: -60
                             transformOrigin: Item.BottomLeft
                             x: 10
                             y: parent.height - height - 4
                             width: 110
-                            elide: Text.ElideRight
+                            spacing: 5
+
+                            Label {
+                                width: parent.width
+                                text: destHead.model.label
+                                color: destHead.selected ? Style.accent
+                                     : destHead.active ? Style.text : Style.textDim
+                                font.pixelSize: Style.fontSizeSmall
+                                font.bold: true
+                                renderType: Text.QtRendering
+                                elide: Text.ElideRight
+                            }
+                            Label {
+                                width: parent.width
+                                visible: text !== ""
+                                text: destHead.model.typeLabel
+                                color: Style.textDisabled
+                                font.pixelSize: Style.fontSizeSmall - 1
+                                renderType: Text.QtRendering
+                                elide: Text.ElideRight
+                            }
                         }
 
                         // active underline at the column top

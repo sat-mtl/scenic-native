@@ -77,6 +77,7 @@ Rectangle {
 
             Label {
                 width: parent.width
+                visible: text !== ""
                 text: head.typeLabel
                 color: Style.textDisabled
                 font.pixelSize: Style.fontSizeSmall

@@ -9,7 +9,7 @@ QtObject {
     property string role: "source"           // "source" | "destination"
     property string mediaType: "video"       // "video" | "audio" | "data"
     // menu group: one of score's protocol categories (NodeCatalog.categoryOrder)
-    property string category: "Utilities"
+    property string category: "Utility"
     property int order: 100                  // position in menus and the matrix
     property bool hidden: false              // not offered in the menus
     property bool enumerate: false           // offered per enumerated device
@@ -23,6 +23,8 @@ QtObject {
     property var makeSettings: null          // params -> device settings
     property var makeProcessData: null       // params -> process data
     property var addr: null                  // device name -> address to bind
+    // device-tree address mirroring the node's name, e.g. a window's title
+    property string nameAddr: ""
     // makeSettings also reads the app settings (ICE servers and their
     // credentials): a session saves the params only, and the settings are
     // made again when it is loaded.
