@@ -27,6 +27,7 @@ QtObject {
     readonly property string pipewireIn: "cf6a355f-34d1-4d24-a6ea-3d204f93cde9"
     readonly property string pipewireOut: "d5e7b22b-b7f6-4680-9610-2457509b7946"
     readonly property string gphoto2: "a7e5e6cc-3e7e-4f92-b5f6-0dca37e64c8a"
+    readonly property string sysinfo: "ae5f811a-0458-421b-9ce5-de7258effa42"
 
     // processes (hubs / sources)
     readonly property string isf: "74ca45ff-92c9-44a0-8f1a-754dea05ee1b"

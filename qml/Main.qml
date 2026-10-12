@@ -42,6 +42,9 @@ ApplicationWindow {
 
     Component.onCompleted: {
         SceneStore.init()
+        StatsStore.init()
+        // creating the stats device is a command: keep it out of the user's stack
+        HistoryStore.markSetupDone()
         Score.play()
         NodeStore.playbackDesired = true
         // the first enumeration ran before the document existed
