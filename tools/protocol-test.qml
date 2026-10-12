@@ -50,6 +50,7 @@ ApplicationWindow {
         "pipewireIn":    ["Path"],
         "pipewireOut":   ["Path","Width","Height","Rate"],
         "sh4ltIn":       ["Path"],
+        "ndiIn":         ["Path"],
         "shmdataOut":    ["Path","Width","Height","Rate"],
         "sh4ltOut":      ["Path","Width","Height","Rate"],
         // Ndi's reader also looks at Format/ColorSpace, but guards those two;
@@ -188,7 +189,8 @@ ApplicationWindow {
             keys[f.key] = true
             app.ok(f.def !== undefined, r.kind + "." + f.key + ": no default")
             const t = f.type ?? (f.file ? "file" : "string")
-            app.ok(["string","int","float","bool","enum","vec2","file","savefile"].indexOf(t) >= 0,
+            app.ok(["string","int","float","bool","enum","vec2","file","savefile",
+                    "sourcename"].indexOf(t) >= 0,
                    r.kind + "." + f.key + ": bad type " + t)
             if (t === "enum") {
                 app.ok(!!f.options && f.options.length > 0,
@@ -227,7 +229,11 @@ ApplicationWindow {
     function checkSettings(r) {
         const proto = protocolName(r.protocol)
         const s = settingsOf(r)
-        if (r.enumerate) {
+        // A sourcename field means the recipe both discovers and accepts a typed
+        // name, so it legitimately carries settings built from that name. A
+        // purely enumerated recipe takes its settings from the device instead.
+        const typable = (r.fields ?? []).some(f => f.type === "sourcename")
+        if (r.enumerate && !typable) {
             app.ok(s === null, r.kind + ": enumerated recipe should carry no static settings")
             return
         }
