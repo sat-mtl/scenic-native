@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
@@ -171,12 +172,12 @@ RowLayout {
             const v = root.value
             if (v === undefined || v === null)
                 return 0
-            return Number(Array.isArray(v) ? v[i] : v[keys[i]]) || 0
+            return Number(Array.isArray(v) ? v[i] : v[vecf.keys[i]]) || 0
         }
         function commit(i, nv) {
             const out = []
-            for (let k = 0; k < count; ++k)
-                out.push(k === i ? nv : component(k))
+            for (let k = 0; k < vecf.count; ++k)
+                out.push(k === i ? nv : vecf.component(k))
             root.edited(out)
         }
 
@@ -185,20 +186,22 @@ RowLayout {
             delegate: TextField {
                 id: comp
                 required property int index
+                // tracks root.value through component(); a delegate is its own
+                // component scope, so it reaches the editor through vecf only
+                readonly property real modelValue: vecf.component(comp.index)
+
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: Style.fontSizeSmall
                 padding: 4
                 validator: DoubleValidator { notation: DoubleValidator.StandardNotation }
+
                 // assigned, not bound: typing into a bound text breaks the
                 // binding for good
-                function sync() { text = vecf.component(index).toFixed(3) }
-                Component.onCompleted: sync()
-                Connections {
-                    target: root
-                    function onValueChanged() { if (!comp.activeFocus) comp.sync() }
-                }
-                onEditingFinished: vecf.commit(index, Number(text) || 0)
+                function sync() { comp.text = comp.modelValue.toFixed(3) }
+                Component.onCompleted: comp.sync()
+                onModelValueChanged: if (!comp.activeFocus) comp.sync()
+                onEditingFinished: vecf.commit(comp.index, Number(comp.text) || 0)
             }
         }
     }
