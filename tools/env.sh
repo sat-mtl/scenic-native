@@ -36,7 +36,8 @@ fi
 require_score() {
     if [ -z "$SCORE_BIN" ] || [ ! -x "$SCORE_BIN" ]; then
         echo "ossia-score not found: put it on the PATH or set SCORE_BIN" \
-             "to an ossia score build with score-addon-ndi and score-addon-ltc." >&2
+             "to an ossia score build with score-addon-ndi, score-addon-ltc," \
+             "score-addon-videoio and score-addon-sysinfo." >&2
         exit 1
     fi
 }

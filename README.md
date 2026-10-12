@@ -45,7 +45,8 @@ are in [`docs/`](docs/).
 ## Running from source
 
 Scenic is written in QML and runs on an ossia score build that has the
-`score-addon-ndi` and `score-addon-ltc` addons:
+`score-addon-ndi`, `score-addon-ltc`, `score-addon-videoio` and
+`score-addon-sysinfo` addons:
 
 ```sh
 SCORE_BIN=/path/to/ossia-score ./run.sh

@@ -2,8 +2,8 @@
 
 Scenic is QML only: a shell (`qml/Main.qml`) and a module (`qml/Scenic/`)
 driving the ossia score engine through score's QML API. There is no C++ to
-build; you need an ossia score binary with the `score-addon-ndi` and
-`score-addon-ltc` addons.
+build; you need an ossia score binary with the `score-addon-ndi`,
+`score-addon-ltc`, `score-addon-videoio` and `score-addon-sysinfo` addons.
 
 ## Running from a checkout
 
