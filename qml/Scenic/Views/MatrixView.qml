@@ -3,18 +3,22 @@ import QtQuick
 import QtQuick.Controls.Basic
 import Scenic
 
-// The routing matrix: destinations as columns under slanted headers, sources
-// as rows. Clicking a head selects the node, clicking a cell toggles the
-// connection.
+// The routing matrix: destinations as columns, sources as rows. Clicking a
+// head selects the node, clicking a cell toggles the connection.
+//
+// A column head reads horizontally: rotated text cannot be bounded by the
+// column it labels, so a long name always escaped into its neighbours. It is
+// shrunk to fit instead, down to minimumHeadFont, and elided below that.
 Item {
     id: matrixView
 
     signal previewRequested(string nodeId)
 
     readonly property int headW: 240
-    readonly property int cellW: 80
+    readonly property int cellW: 112
     readonly property int rowH: 64
-    readonly property int bandH: 150
+    readonly property int bandH: 54
+    readonly property int minimumHeadFont: 8
 
     Flickable {
         anchors.fill: parent
@@ -34,20 +38,21 @@ Item {
                 spacing: 2
                 z: 2
 
-                // Corner with the diagonal DESTINATIONS caption
+                // Corner with the DESTINATIONS caption. Horizontal like the
+                // heads it labels, and there is no room for a diagonal in a
+                // band this short.
                 Item {
                     width: matrixView.headW
                     height: matrixView.bandH
                     Label {
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        anchors.margins: 8
                         text: Translations.t("DESTINATIONS")
                         color: Style.textDim
                         font.pixelSize: Style.fontSizeSmall
                         font.bold: true
-                        rotation: -45
-                        // BottomLeft pivots on (x, y + height)
-                        transformOrigin: Item.BottomLeft
-                        x: parent.width - 130
-                        y: parent.height - height - 6
+                        font.letterSpacing: 2
                     }
                 }
 
@@ -73,19 +78,14 @@ Item {
                                  : headHover.hovered ? Qt.rgba(1, 1, 1, 0.05) : "transparent"
                         }
 
-                        // Rotated about (x, y + height). At -60 degrees a
-                        // 110px label spans about width/2 + height horizontally,
-                        // which stays within one column. Both lines share one
-                        // transform so that the spacing between them is the
-                        // Column's, not a vertical offset foreshortened by the
-                        // rotation.
                         Column {
-                            rotation: -60
-                            transformOrigin: Item.BottomLeft
-                            x: 10
-                            y: parent.height - height - 4
-                            width: 110
-                            spacing: 5
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.leftMargin: 4
+                            anchors.rightMargin: 4
+                            anchors.bottomMargin: 7
+                            spacing: 1
 
                             Label {
                                 width: parent.width
@@ -94,7 +94,9 @@ Item {
                                      : destHead.active ? Style.text : Style.textDim
                                 font.pixelSize: Style.fontSizeSmall
                                 font.bold: true
-                                renderType: Text.QtRendering
+                                fontSizeMode: Text.HorizontalFit
+                                minimumPixelSize: matrixView.minimumHeadFont
+                                horizontalAlignment: Text.AlignHCenter
                                 elide: Text.ElideRight
                             }
                             Label {
@@ -103,7 +105,9 @@ Item {
                                 text: destHead.model.typeLabel
                                 color: Style.textDisabled
                                 font.pixelSize: Style.fontSizeSmall - 1
-                                renderType: Text.QtRendering
+                                fontSizeMode: Text.HorizontalFit
+                                minimumPixelSize: matrixView.minimumHeadFont - 1
+                                horizontalAlignment: Text.AlignHCenter
                                 elide: Text.ElideRight
                             }
                         }
@@ -118,8 +122,12 @@ Item {
                         }
 
                         HoverHandler { id: headHover }
-                        ToolTip.text: destHead.model.label
-                        ToolTip.visible: headHover.hovered && destHead.model.label.length > 16
+                        // a shrunk or elided head is not readable: always offer
+                        // the full name
+                        ToolTip.text: destHead.model.typeLabel !== ""
+                                    ? destHead.model.label + " — " + destHead.model.typeLabel
+                                    : destHead.model.label
+                        ToolTip.visible: headHover.hovered
                         MouseArea {
                             anchors.fill: parent
                             onClicked: NodeStore.selectedNodeId =
