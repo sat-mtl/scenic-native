@@ -17,6 +17,12 @@ ApplicationWindow {
     color: Style.background
     font.family: Style.fontFamily
 
+    // The shell runs in a plain QQmlEngine, whose quit() signal nothing
+    // connects: Qt.quit() is a no-op here and Qt.exit() is the wired path
+    // (score-plugin-js ApplicationPlugin). Without this the engine, the output
+    // windows and the audio stream outlive the shell.
+    onClosing: Qt.exit(0)
+
     palette {
         window: Style.background
         windowText: Style.text
@@ -292,7 +298,10 @@ ApplicationWindow {
         z: 100
     }
 
-    InspectorDrawer { id: inspector }
+    InspectorDrawer {
+        id: inspector
+        pageActive: navRail.currentIndex === 0
+    }
 
     PeersPanel { id: peersPanel }
 

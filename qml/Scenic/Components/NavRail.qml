@@ -33,14 +33,14 @@ Rectangle {
 
         Repeater {
             model: [
-                { label: Translations.t("Matrix"),   glyph: "⤡" },
-                { label: Translations.t("Settings"), glyph: "⚙" },
-                { label: Translations.t("Help"),     glyph: "ⓘ" }
+                Translations.t("Matrix"),
+                Translations.t("Settings"),
+                Translations.t("Help")
             ]
             delegate: ItemDelegate {
                 id: entry
                 required property int index
-                required property var modelData
+                required property string modelData
                 width: rail.width
                 height: 52
                 readonly property bool active: rail.currentIndex === index
@@ -55,22 +55,14 @@ Rectangle {
                     }
                 }
 
-                contentItem: Row {
-                    spacing: 10
-                    leftPadding: 14
-                    Label {
-                        text: entry.modelData.glyph
-                        color: entry.active ? Style.accent : Style.textDim
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Label {
-                        text: entry.modelData.label
-                        color: entry.active ? Style.text : Style.textDim
-                        font.pixelSize: Style.fontSize
-                        font.capitalization: Font.AllUppercase
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
+                contentItem: Label {
+                    leftPadding: 18
+                    text: entry.modelData
+                    color: entry.active ? Style.text : Style.textDim
+                    font.pixelSize: Style.fontSize
+                    font.bold: entry.active
+                    font.capitalization: Font.AllUppercase
+                    verticalAlignment: Text.AlignVCenter
                 }
 
                 onClicked: rail.currentIndex = entry.index
