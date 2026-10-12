@@ -17,17 +17,22 @@ Drawer {
     height: parent ? parent.height : 0
     modal: false
     interactive: false
-    visible: NodeStore.selectedNodeId !== ""
+
+    // the inspector belongs to the matrix; the other pages have no selection
+    property bool pageActive: true
+    visible: pageActive && NodeStore.selectedNodeId !== ""
 
     background: Rectangle { color: Style.surface }
 
     property var recipe: null
+    property var row: null           // the node's row model: name and type caption
     property var params: ({})        // current values of recipe.fields
     property var fields: []
     property var ports: []           // [{ portObj, name, vt, min, max, enums }]
 
     function rebuild() {
         const id = NodeStore.selectedNodeId
+        row = NodeStore.get(id)
         if (id === "") { recipe = null; fields = []; ports = []; params = {}; return }
 
         const info = NodeStore.creationInfo[id] ?? {}
@@ -87,19 +92,30 @@ Drawer {
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 0
-                Label {
+                TextField {
+                    id: nameField
                     Layout.fillWidth: true
-                    text: {
-                        const n = NodeStore.get(NodeStore.selectedNodeId)
-                        return n ? n.label : ""
-                    }
+                    text: drawer.row ? drawer.row.label : ""
                     color: Style.text
                     font.pixelSize: Style.fontSizeLarge
                     font.bold: true
-                    elide: Text.ElideRight
+                    padding: 0
+                    background: Rectangle {
+                        color: "transparent"
+                        anchors.bottom: parent.bottom
+                        height: 1
+                        width: parent.width
+                        Rectangle {
+                            anchors.fill: parent
+                            color: nameField.activeFocus ? Style.accent
+                                 : nameField.hovered ? Style.item : "transparent"
+                        }
+                    }
+                    onEditingFinished: NodeStore.rename(NodeStore.selectedNodeId, text)
                 }
                 Label {
-                    text: drawer.recipe ? drawer.recipe.label : ""
+                    visible: text !== ""
+                    text: drawer.row ? drawer.row.typeLabel : ""
                     color: Style.textDim
                     font.pixelSize: Style.fontSizeSmall
                 }

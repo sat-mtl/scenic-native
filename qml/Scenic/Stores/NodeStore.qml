@@ -97,6 +97,28 @@ QtObject {
         return null
     }
 
+    //! The type caption shown under a node's name, empty when it would only
+    //! repeat the name — which it does for every node the user has not renamed.
+    function typeLabelFor(info: var, recipe: var): string {
+        const type = recipe ? recipe.label : info.kind
+        const norm = s => String(s ?? "").trim().toLowerCase()
+        return norm(type) === norm(info.label) ? "" : type
+    }
+
+    //! Rename a node. Undoable, and the device keeps its identity: only the
+    //! caption and, for a window output, the title of its window change.
+    function rename(nodeId: string, label: string) {
+        const info = creationInfo[nodeId]
+        if (!info || label === "" || label === info.label)
+            return
+        const next = Object.assign({}, info, { label: label })
+        Score.withMacro(() => {
+            Score.pushCommand(infoCommand, { nodeId, info }, { nodeId, info: next })
+        })
+        HistoryStore.push("rename " + nodeId)
+        SessionStore.markDirty()
+    }
+
     //! Rebuild the row models from creationInfo and the document. A model is
     //! only reset when its rows actually changed, so thumbnails are not torn
     //! down on every edit.
@@ -109,7 +131,7 @@ QtObject {
             const recipe = NodeCatalog.recipe(info.kind)
             ;(info.role === "source" ? srcRows : dstRows).push({
                 nodeId: id, label: info.label, kind: info.kind,
-                typeLabel: recipe ? recipe.label : info.kind,
+                typeLabel: typeLabelFor(info, recipe),
                 mediaType: info.mediaType, role: info.role
             })
         }
@@ -267,6 +289,7 @@ QtObject {
         if (recipe.process !== "")
             buildProcess(nodeId, recipe, info.params)
         bindDevice(nodeId, recipe)
+        applyName(nodeId, recipe, info.label)
         return true
     }
 
@@ -363,6 +386,12 @@ QtObject {
         return true
     }
 
+    //! Push a node's name to the device address that mirrors it.
+    function applyName(nodeId: string, recipe: var, label: string) {
+        if (recipe && recipe.nameAddr !== "")
+            Device.write(nodeId + "_dev:" + recipe.nameAddr, label)
+    }
+
     //! Handler of infoCommand, run by undo and redo.
     function applyInfo(nodeId: string, info: var) {
         if (info) {
@@ -370,6 +399,7 @@ QtObject {
             ci[nodeId] = info
             creationInfo = ci
             const recipe = NodeCatalog.recipe(info.kind)
+            applyName(nodeId, recipe, info.label)
             if (recipe && recipe.transport !== ""
                     && !BridgeStore.isOpenWith(nodeId, info.params ?? {}))
                 BridgeStore.open(nodeId, recipe, info.params ?? {}, info.label)
