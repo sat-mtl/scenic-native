@@ -146,8 +146,11 @@ RowLayout {
                 target: root
                 function onValueChanged() { if (!sourceCombo.activeFocus) sourceCombo.sync() }
             }
-            onActivated: root.edited(textAt(currentIndex))
-            onAccepted: root.edited(editText)
+            onActivated: root.edited(sourceCombo.textAt(sourceCombo.currentIndex))
+            onAccepted: root.edited(sourceCombo.editText)
+            // as above: a dialog gated on this value must see it as it is typed
+            onEditTextChanged: if (sourceCombo.activeFocus)
+                                   root.editing(sourceCombo.editText)
         }
 
         ToolButton {
@@ -212,6 +215,11 @@ RowLayout {
         Layout.fillWidth: true
         text: root.value !== undefined && root.value !== null ? String(root.value) : ""
         placeholderText: root.field.placeholder ?? ""
+        // Report each keystroke as an edit in progress. A creation dialog
+        // enables OK from the values it has been given, and committing only on
+        // editingFinished deadlocked it: clicking a disabled OK does not move
+        // focus, so the text never committed and OK never enabled.
+        onTextEdited: root.editing(textField.text)
         onEditingFinished: if (textField.text !== String(root.value ?? ""))
                                root.edited(textField.text)
     }
