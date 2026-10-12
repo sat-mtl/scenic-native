@@ -66,6 +66,40 @@ Drawer {
         ports = list
     }
 
+    // score's enumValues() returns the domain's value set, which is non-empty
+    // for anything bounded: {0,1} for a bool, one entry per component for a
+    // vector. Only the value type says what the control is; the list just
+    // names an integer's choices.
+    readonly property var editors: ({
+        "Bool": "bool", "Float": "float", "String": "string",
+        "Vec2f": "vecf", "Vec3f": "vecf", "Vec4f": "vecf"
+    })
+
+    function editorFor(vt: string, enums: var): string {
+        if (vt === "Int" || vt === "String")
+            return enums.length > 0 ? "enum" : (vt === "Int" ? "int" : "string")
+        return editors[vt] ?? "string"
+    }
+
+    function componentsOf(vt: string): int {
+        return vt === "Vec4f" ? 4 : vt === "Vec3f" ? 3 : 2
+    }
+
+    //! A control inlet's value as plain JS. score hands QML a wrapper whose
+    //! only dependable conversion is textual -- "0.5", "false", "[0.5, 0.5]" --
+    //! so a vector read straight off the port looks like an empty object and
+    //! every component comes out 0.
+    function portValue(port: var, vt: string): var {
+        const s = String(port.value)
+        if (vt === "Bool")
+            return s === "true" || s === "1"
+        if (vt.startsWith("Vec")) {
+            const m = s.match(/-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?/g)
+            return m ? m.map(Number) : []
+        }
+        return vt === "String" ? s : Number(s)
+    }
+
     function commitField(key, value) {
         const id = NodeStore.selectedNodeId
         if (id === "" || !recipe) return
@@ -219,17 +253,13 @@ Drawer {
                         Layout.fillWidth: true
                         field: ({
                             label: modelData.name,
-                            type: modelData.enums.length > 0 ? "enum"
-                                : modelData.vt === "Bool" ? "bool"
-                                : modelData.vt === "Int" ? "int"
-                                : modelData.vt === "Float" ? "float" : "string",
+                            type: drawer.editorFor(modelData.vt, modelData.enums),
                             min: modelData.min, max: modelData.max,
+                            components: drawer.componentsOf(modelData.vt),
                             options: modelData.enums.map(e => ({ value: e, label: String(e) }))
                         })
                         // bound, not copied: a preset can change it after rebuild()
-                        value: modelData.vt === "Bool"
-                             ? (modelData.portObj.value === true)
-                             : modelData.portObj.value
+                        value: drawer.portValue(modelData.portObj, modelData.vt)
                         // one undo step per gesture, as in score's own controls
                         onEditing: (v) => Score.editValue(modelData.portObj, v)
                         onEdited: (v) => {

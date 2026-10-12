@@ -42,7 +42,8 @@ RowLayout {
         textRole: "label"
         valueRole: "value"
         model: root.field.options ?? []
-        function sync() { currentIndex = indexOfValue(root.value) }
+        // a value outside the domain must still show something
+        function sync() { currentIndex = Math.max(0, indexOfValue(root.value)) }
         Component.onCompleted: sync()
         Connections {
             target: root
@@ -111,6 +112,52 @@ RowLayout {
             editable: true; from: -32768; to: 32768
             value: vec.component(1)
             onValueModified: root.edited([vx.value, value])
+        }
+    }
+
+    // two to four floats: an ISF position, scale, tiling or colour
+    RowLayout {
+        id: vecf
+        visible: root.ftype === "vecf"
+        Layout.fillWidth: true
+        spacing: 4
+
+        readonly property int count: root.field.components ?? 2
+        readonly property var keys: ["x", "y", "z", "w"]
+
+        function component(i) {
+            const v = root.value
+            if (v === undefined || v === null)
+                return 0
+            return Number(Array.isArray(v) ? v[i] : v[keys[i]]) || 0
+        }
+        function commit(i, nv) {
+            const out = []
+            for (let k = 0; k < count; ++k)
+                out.push(k === i ? nv : component(k))
+            root.edited(out)
+        }
+
+        Repeater {
+            model: vecf.count
+            delegate: TextField {
+                id: comp
+                required property int index
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: Style.fontSizeSmall
+                padding: 4
+                validator: DoubleValidator { notation: DoubleValidator.StandardNotation }
+                // assigned, not bound: typing into a bound text breaks the
+                // binding for good
+                function sync() { text = vecf.component(index).toFixed(3) }
+                Component.onCompleted: sync()
+                Connections {
+                    target: root
+                    function onValueChanged() { if (!comp.activeFocus) comp.sync() }
+                }
+                onEditingFinished: vecf.commit(index, Number(text) || 0)
+            }
         }
     }
 
