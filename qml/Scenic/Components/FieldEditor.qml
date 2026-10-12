@@ -18,8 +18,10 @@ RowLayout {
     readonly property string ftype: field.type ?? "string"
     spacing: Style.spacing
 
+    // score names its control inlets in lower case ("bright", "hue"): the
+    // inspector capitalises them, leaving an already-capitalised label alone.
     Label {
-        text: root.field.label
+        text: root.field.label.charAt(0).toUpperCase() + root.field.label.slice(1)
         color: Style.textDim
         font.pixelSize: Style.fontSizeSmall
         Layout.preferredWidth: 96
@@ -27,7 +29,7 @@ RowLayout {
         wrapMode: Text.WordWrap
     }
 
-    Switch {
+    ScenicSwitch {
         visible: root.ftype === "bool"
         checked: root.value === true || root.value === "true"
         onToggled: root.edited(checked)
@@ -49,7 +51,7 @@ RowLayout {
         onActivated: root.edited(currentValue)
     }
 
-    SpinBox {
+    ScenicSpinBox {
         visible: root.ftype === "int"
         Layout.fillWidth: true
         editable: true
@@ -63,7 +65,7 @@ RowLayout {
         visible: root.ftype === "float"
         Layout.fillWidth: true
         spacing: 4
-        Slider {
+        ScenicSlider {
             id: slider
             Layout.fillWidth: true
             from: root.field.min ?? 0
@@ -96,14 +98,16 @@ RowLayout {
             const c = i === 0 ? (v.x ?? v[0]) : (v.y ?? v[1])
             return Number(c) || 0
         }
-        SpinBox {
+        ScenicSpinBox {
             id: vx
+            Layout.fillWidth: true
             editable: true; from: -32768; to: 32768
             value: vec.component(0)
             onValueModified: root.edited([value, vy.value])
         }
-        SpinBox {
+        ScenicSpinBox {
             id: vy
+            Layout.fillWidth: true
             editable: true; from: -32768; to: 32768
             value: vec.component(1)
             onValueModified: root.edited([vx.value, value])

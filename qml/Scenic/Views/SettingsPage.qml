@@ -41,7 +41,7 @@ Item {
                 color: Style.text
                 Layout.preferredWidth: 180
             }
-            Switch {
+            ScenicSwitch {
                 checked: SettingsStore.showThumbnails
                 onToggled: {
                     SettingsStore.showThumbnails = checked

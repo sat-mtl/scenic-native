@@ -30,5 +30,8 @@ NavRail 1.0 Components/NavRail.qml
 StatusBar 1.0 Components/StatusBar.qml
 ScenicMenuButton 1.0 Components/ScenicMenuButton.qml
 FieldEditor 1.0 Components/FieldEditor.qml
+ScenicSlider 1.0 Components/ScenicSlider.qml
+ScenicSwitch 1.0 Components/ScenicSwitch.qml
+ScenicSpinBox 1.0 Components/ScenicSpinBox.qml
 NodeCategoryMenu 1.0 Components/NodeCategoryMenu.qml
 DeviceList 1.0 Components/DeviceList.qml
