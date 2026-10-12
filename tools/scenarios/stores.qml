@@ -135,10 +135,15 @@ Item {
                 A(SceneStore.activeSceneId === "scene_1", "load restored the wrong scene")
                 break
             case 9:
-                L("stats: cpu=" + StatsStore.cpuPercent.toFixed(0)
-                  + " mem=" + StatsStore.memPercent.toFixed(0)
-                  + " iface=" + StatsStore.netInterface)
-                A(StatsStore.memPercent > 0, "no memory reading from /proc")
+                L("stats: cpu=" + StatsStore.cpuPercent.toFixed(1)
+                  + " mem=" + StatsStore.memPercent.toFixed(1)
+                  + " iface=" + StatsStore.netInterface
+                  + " rx=" + StatsStore.netRxKBps.toFixed(1)
+                  + " tx=" + StatsStore.netTxKBps.toFixed(1))
+                A(Score.device(StatsStore.deviceName) !== null,
+                  "no sysinfo device: score was built without score-addon-sysinfo")
+                A(StatsStore.memPercent > 0, "no memory reading from the sysinfo device")
+                A(StatsStore.cpuPercent > 0, "no cpu reading from the sysinfo device")
                 // score always lists at least a default camera
                 L("enumerated: cameras=" + root.shell.devicesFor("camera").length
                   + " ndi=" + root.shell.devicesFor("ndiin").length)

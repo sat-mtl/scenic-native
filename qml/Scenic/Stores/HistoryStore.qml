@@ -14,12 +14,21 @@ QtObject {
     // Score.canUndo() does not notify: bindings depend on this counter instead.
     property int revision: 0
 
-    readonly property bool canUndo: (revision, Score.canUndo())
+    readonly property bool canUndo: (revision, Score.undoIndex() > setupIndex)
     readonly property bool canRedo: (revision, Score.canRedo())
 
     // engine undo index -> label of the command that reached it
     property var labels: ({})
     property int lastIndex: 0
+
+    // Scenic's own startup commands sit at or below this index; undo stops there.
+    property int setupIndex: 0
+
+    function markSetupDone() {
+        setupIndex = Score.undoIndex()
+        lastIndex = setupIndex
+        revision++
+    }
 
     //! Label the edit just committed. A macro that committed nothing moved
     //! no index and records nothing.
@@ -51,7 +60,7 @@ QtObject {
     }
 
     function undo() {
-        if (!Score.canUndo())
+        if (!canUndo)
             return
         const label = labels[Score.undoIndex()]
         const step = function() { Score.undo(); resync() }

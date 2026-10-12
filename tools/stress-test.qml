@@ -145,8 +145,9 @@ ApplicationWindow {
             if (Score.find(id + "_proc") !== null) return "orphan proc for removed " + id
             if (Score.device(id + "_dev") !== null) return "orphan device for removed " + id
         }
-        // 4. the undo facade must agree with the engine it is a facade over
-        if (HistoryStore.canUndo !== Score.canUndo())
+        // 4. the undo facade must agree with the engine it is a facade over,
+        // except that it hides the setup commands below HistoryStore.setupIndex
+        if (HistoryStore.canUndo && !Score.canUndo())
             return "HistoryStore.canUndo disagrees with the engine"
         if (HistoryStore.canRedo !== Score.canRedo())
             return "HistoryStore.canRedo disagrees with the engine"
@@ -282,7 +283,7 @@ ApplicationWindow {
                 let guard = 0
                 while (HistoryStore.canUndo && guard++ < 500) HistoryStore.undo()
                 let iv = app.invariants(); if (iv !== "") app.fail("after undo-all: " + iv)
-                if (Score.undoIndex() !== 0)
+                if (Score.undoIndex() !== HistoryStore.setupIndex)
                     app.fail("undo-all stopped at " + Score.undoIndex())
                 // the bottom of the stack is the empty document we started from
                 if (app.connKeys().length !== 0 || NodeStore.sources.count !== 0

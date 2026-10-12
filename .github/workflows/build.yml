@@ -38,13 +38,14 @@ jobs:
         uses: actions/checkout@v4
 
       # Scenic needs the NDI and LTC addons, and score-plugin-avnd for its
-      # gain stage; videoio brings capture and playout hardware backends.
+      # gain stage; videoio brings capture and playout hardware backends, and
+      # sysinfo feeds the status bar's meters.
       - name: ossia score build
         id: score
         uses: ossia/actions/custom-score-build@master
         with:
           cmake-options: >
-            -DSCORE_ENABLE_ADDONS=score-addon-ndi,score-addon-ltc,score-addon-videoio
+            -DSCORE_ENABLE_ADDONS=score-addon-ndi,score-addon-ltc,score-addon-videoio,score-addon-sysinfo
             -DSCORE_DISABLE_PLUGINS=score-plugin-faust,score-plugin-jit,score-plugin-vst,score-plugin-vst3,score-plugin-clap,score-plugin-lv2,score-plugin-pd,score-plugin-ysfx,score-plugin-controlsurface,score-plugin-spline3d,score-plugin-recording,score-plugin-nodal,score-plugin-spline,score-plugin-mapping,score-plugin-threedim
             -DSCORE_QT_PLUGINS_NO_QTQUICK3D=1
           macos-certificate-base64: ${{ secrets.MAC_CERT_B64 }}
