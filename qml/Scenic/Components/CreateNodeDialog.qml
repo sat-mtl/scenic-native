@@ -69,8 +69,11 @@ Dialog {
         NodeStore.create(recipe, settings, undefined, undefined, values)
     }
 
+    //! A fresh object, not the one in place: QML compares a var property by
+    //! reference, so mutating it and assigning it back emits no change and
+    //! every binding over it -- `valid`, and so the OK button -- goes stale.
     function setField(key, v) {
-        let m = dialog.values
+        let m = Object.assign({}, dialog.values)
         m[key] = v
         dialog.values = m
     }
@@ -100,6 +103,9 @@ Dialog {
                 visible: !modelData.visibleWhen || modelData.visibleWhen(dialog.values)
                 field: modelData
                 value: dialog.values[modelData.key] ?? modelData.def
+                // an edit in progress counts here: nothing is built until OK,
+                // and the button's enabled state is read from these values
+                onEditing: (v) => dialog.setField(modelData.key, v)
                 onEdited: (v) => dialog.setField(modelData.key, v)
             }
         }

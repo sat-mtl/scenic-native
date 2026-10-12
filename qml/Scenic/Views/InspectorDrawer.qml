@@ -103,7 +103,8 @@ Drawer {
     function commitField(key, value) {
         const id = NodeStore.selectedNodeId
         if (id === "" || !recipe) return
-        let p = params
+        // a fresh object: assigning back the same one notifies nothing
+        let p = Object.assign({}, params)
         p[key] = value
         params = p
         NodeStore.reconfigure(id, recipe.makeSettings ? recipe.makeSettings(p) : null, p)
