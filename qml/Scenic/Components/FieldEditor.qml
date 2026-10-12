@@ -115,6 +115,48 @@ RowLayout {
         }
     }
 
+    // A shared-memory or network source: pick a discovered one or type a name.
+    // Typing matters -- NDI, Spout and Syphon all connect by name as soon as
+    // the sender appears, so a source that is not broadcasting yet must still
+    // be selectable, and Spout and Syphon only enumerate when asked.
+    RowLayout {
+        id: picker
+        visible: root.ftype === "sourcename"
+        Layout.fillWidth: true
+        spacing: 4
+
+        DeviceList { id: discovered; deviceType: root.field.protocol ?? "" }
+
+        readonly property var names: discovered.devices
+            .map(d => d.name)
+            .filter(n => n !== "" && !(root.field.exclude && root.field.exclude(n)))
+
+        ComboBox {
+            id: sourceCombo
+            Layout.fillWidth: true
+            editable: true
+            model: picker.names
+            function sync() {
+                editText = root.value !== undefined && root.value !== null
+                         ? String(root.value) : ""
+            }
+            Component.onCompleted: sync()
+            Connections {
+                target: root
+                function onValueChanged() { if (!sourceCombo.activeFocus) sourceCombo.sync() }
+            }
+            onActivated: root.edited(textAt(currentIndex))
+            onAccepted: root.edited(editText)
+        }
+
+        ToolButton {
+            text: "⟳"
+            ToolTip.text: Translations.t("Look for sources")
+            ToolTip.visible: hovered
+            onClicked: discovered.refresh()
+        }
+    }
+
     // two to four floats: an ISF position, scale, tiling or colour
     RowLayout {
         id: vecf

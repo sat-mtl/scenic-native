@@ -68,6 +68,8 @@ ApplicationWindow {
     DeviceList { id: ndi; deviceType: Uuids.ndiIn }
     DeviceList { id: pipewire; deviceType: Uuids.pipewireIn }
     DeviceList { id: gphoto; deviceType: Uuids.gphoto2 }
+    DeviceList { id: spout; deviceType: Uuids.spoutIn }
+    DeviceList { id: syphon; deviceType: Uuids.syphonIn }
 
     // The camera enumerator reports one entry per capture mode, with the camera
     // in `category`: group them per camera, in the order reported.
@@ -91,6 +93,8 @@ ApplicationWindow {
         case "ndiin":      return ndi.devices
         case "pipewirein": return pipewire.devices
         case "gphoto2":    return gphoto.devices
+        case "spoutin":    return spout.devices
+        case "syphonin":   return syphon.devices
         }
         return []
     }
@@ -102,7 +106,9 @@ ApplicationWindow {
             items: g.items.map(r => ({
                 recipe: r,
                 devices: r.enumerate ? devicesFor(r.kind) : null,
-                nested: r.kind === "camera"
+                nested: r.kind === "camera",
+                // an enumerated type that also has fields can be named by hand
+                typable: r.enumerate && NodeCatalog.fieldsOf(r).length > 0
             }))
         }))
     }
