@@ -64,7 +64,16 @@ Menu {
             MenuItem {
                 enabled: false
                 visible: entryMenu.modelData.devices.length === 0
+                         && !entryMenu.modelData.typable
                 text: Translations.t("None found")
+            }
+
+            // A source that is not broadcasting yet cannot be discovered, and
+            // discovery can fail outright: naming one by hand must stay possible.
+            MenuItem {
+                visible: entryMenu.modelData.typable
+                text: Translations.t("Enter a name…")
+                onTriggered: root.picked(entryMenu.modelData.recipe)
             }
         }
         onObjectAdded: (index, object) => root.insertMenu(index, object)

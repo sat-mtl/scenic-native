@@ -6,7 +6,10 @@ NodeType {
     role: "source"; mediaType: "video"; category: "Video In"; order: 101
     platforms: ["osx"]
     protocol: Uuids.syphonIn
-    fields: [{ key: "path", label: Translations.t("Server name"), def: "Scenic" }]
+    enumerate: true
+    fields: [{ key: "path", label: Translations.t("Server name"),
+               type: "sourcename", protocol: Uuids.syphonIn, def: "", required: true,
+               exclude: n => NodeStore.isOwnSender("syphonout", n) }]
     makeSettings: p => ({ Path: p.path })
     addr: name => name + ":/"
 }

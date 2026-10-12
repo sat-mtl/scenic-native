@@ -105,6 +105,24 @@ QtObject {
         return norm(type) === norm(info.label) ? "" : type
     }
 
+    //! Whether `name` is a sender this document publishes with `kind`.
+    //! Receiving our own output feeds the graph back into itself; Spout appends
+    //! _1, _2 … when the requested name is taken, so the name actually
+    //! published is not always the configured one.
+    function isOwnSender(kind: string, name: string): bool {
+        for (const id of nodeOrder) {
+            const info = creationInfo[id]
+            const own = info && info.kind === kind && exists(id) && info.params
+                      ? String(info.params.path ?? "") : ""
+            if (own === "" || !name.startsWith(own))
+                continue
+            const suffix = name.slice(own.length)
+            if (suffix === "" || /^_\d+$/.test(suffix))
+                return true
+        }
+        return false
+    }
+
     //! Rename a node. Undoable, and the device keeps its identity: only the
     //! caption and, for a window output, the title of its window change.
     function rename(nodeId: string, label: string) {
