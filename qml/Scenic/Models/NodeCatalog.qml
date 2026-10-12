@@ -17,7 +17,7 @@ QtObject {
     readonly property var categoryOrder: [
         "Video In", "Video Out", "Video", "Audio", "Media",
         "Network", "Web", "Hardware", "Lights", "Tracking",
-        "Software", "Utilities"
+        "Software", "Utility"
     ]
 
     Component.onCompleted: reload()
